@@ -86,9 +86,10 @@ void stats(struct person* people) {
     float avg = 0;
     int i;
     for (i = 0; i < COUNT; i++) {
-        min = people[i].age < min ? people[i].age : min;
-        max = people[i].age > max ? people[i].age : max;
-        avg += people[i].age;
+        int age = people[i].age;
+        min = age < min ? age : min;
+        max = age > max ? age : max;
+        avg += age;
     }
     avg /= COUNT;
     printf("min: %d\n", min);
