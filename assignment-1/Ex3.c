@@ -23,7 +23,6 @@ void output(struct person* people);
 void stats(struct person* people);
 void deallocate(struct person* people);
 
-
 int main() {
     srand(time(NULL));
 
@@ -48,6 +47,10 @@ int main() {
     return 0;
 }
 
+/* Description: Allocates COUNT persons using malloc.
+ * Preconditions: None
+ * Postconditions: Returns an array of uninitialized persons.
+ */
 struct person* allocate() {
     /*Allocate memory for ten persons - use malloc*/
     struct person* ten_persons = (struct person*) malloc(COUNT * sizeof(struct person));
@@ -56,6 +59,10 @@ struct person* allocate() {
     return ten_persons;
 }
 
+/* Description: Write random persons to an array.
+ * Preconditions: None (the array is completely overwritten and not read)
+ * Postconditions: All persons have an age between 18 and 90 and a sex of M or F.
+ */
 void generate(struct person* people) {
     /*Generate random age and sex for 10 persons and store in people
 	Age is between 18 and 90 - sex is either M or F
@@ -68,6 +75,10 @@ void generate(struct person* people) {
     }
 }
 
+/* Description: Print an array of persons.
+ * Preconditions: None
+ * Postconditions: None (this does not mutate the array)
+ */
 void output(struct person* people) {
     /*Output information about the ten persons in the format:
 	Person 1: Age: varAge Sex: varSex
@@ -79,6 +90,10 @@ void output(struct person* people) {
     }
 }
 
+/* Description: Print stats about an array of people.
+ * Preconditions: None
+ * Postconditions: None (this does not mutate the array)
+ */
 void stats(struct person* people) {
     /*Compute and print the minimum, maximum and average age of the ten persons*/
     int min = people[0].age;
@@ -97,6 +112,10 @@ void stats(struct person* people) {
     printf("avg: %f\n", avg);
 }
 
+/* Description: Free the array.
+ * Preconditions: An array.
+ * Postconditions: No array.
+ */
 void deallocate(struct person* people) {
     /*Deallocate memory from people by calling free()*/
     free(people);
