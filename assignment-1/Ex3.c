@@ -53,7 +53,7 @@ int main() {
  */
 struct person* allocate() {
     /* Allocate memory for ten persons - use malloc */
-    struct person* ten_persons = 
+    struct person* ten_persons =
         (struct person*) malloc(COUNT * sizeof(struct person));
 
     /* return the pointer */
@@ -88,7 +88,7 @@ void output(struct person* people) {
      * Person 10: Age: varAge Sex: varSex */
     int i;
     for (i = 0; i < COUNT; i++) {
-        printf("Person %d: Age: %d Sex: %c\n", i + 1, 
+        printf("Person %d: Age: %d Sex: %c\n", i + 1,
             people[i].age, people[i].sex);
     }
 }
