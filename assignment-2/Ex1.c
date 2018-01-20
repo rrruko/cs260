@@ -3,7 +3,7 @@
  * Date: 20-1-2018
  * Solution description:
  */
- 
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -35,8 +35,15 @@ bool isLower(char ch) {
     return ch >= 'a' && ch <= 'z';
 }
 
+// Close enough
+bool isSpace(char ch) {
+    return ch == ' '
+        || ch == '\t'
+        || ch == '\n';
+}
+
 /*
-    Desc: O(n). Stick all the words in a string together and put a new \0 at
+    Desc: Stick all the words in a string together and put a new \0 at
         the end.
     Pre: A null byte-terminated mutable string.
     Post: All the spaces are gone (only handles 0x20 SPACE, not e.g. tabs)
@@ -45,7 +52,7 @@ void removeSpaces(char* word) {
     int i;
     int j = 0;
     for (i = 0; word[j] != '\0'; i++, j++) {
-        while (word[j] == ' ') {
+        while (isSpace(word[j])) {
             j++;
         }
         word[i] = word[j];
@@ -53,16 +60,22 @@ void removeSpaces(char* word) {
     word[i] = '\0';
 }
 
+/*
+    Desc: Convert a string to pascal case.
+    Pre: A null byte-terminated mutable string.
+    Post: The first letter of each word is capitalized, all other letters are
+        made lowercase, and all the spaces are removed.
+*/
 void PascalCase(char* word) {
-    /* Convert to Pascal case
-        It is safe to assume that he string is terminated by '\0' */
-    word[0] = toUpperCase(word[0]);
+    if (isLower(word[0])) {
+        word[0] = toUpperCase(word[0]);
+    }
 
     int i;
     for (i = 1; word[i] != '\0'; i++) {
-        if (word[i - 1] == ' ' && isLower(word[i])) {
+        if (isSpace(word[i - 1]) && isLower(word[i])) {
             word[i] = toUpperCase(word[i]);
-        } else if (word[i - 1] != ' ' && isUpper(word[i])) {
+        } else if (!isSpace(word[i - 1]) && isUpper(word[i])) {
             word[i] = toLowerCase(word[i]);
         }
     }
@@ -70,21 +83,18 @@ void PascalCase(char* word) {
     removeSpaces(word);
 }
 
-void testPascalCase() {
-    char s[] = "tHe bEsT Of tImEs";
-    PascalCase(s);
-    printf("%s\n", s);
-}
-
 int main() {
-    testPascalCase();
 
     /* Read word from the keyboard using scanf
 	Max length 100 characters including string terminator */
+    char buffer[100];
+    scanf("%[^\n]", buffer);
 
     /* Call PascalCase */
-    
+    PascalCase(buffer);
+
     /* Print the new word */
-    
+    printf("%s\n", buffer);
+
     return 0;
 }
