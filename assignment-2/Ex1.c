@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define bool int
+#define bool char
 
 /*
     Desc: converts ch to upper case
