@@ -1,14 +1,14 @@
 /* CS260 - Assignment 2 - EX 3*/
-/* Name:
- * Date:
- * Solution description:
+/* Name: Ethan Jones
+ * Date: 20-9-2018
+ * Solution description: Sorting arrays of structs and analyzing the sort.
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-#define bool int
+#define bool char
 #define true 1
 #define false 0
 
@@ -17,13 +17,22 @@ typedef struct person {
 	char sex;
 } person;
 
+/*
+    Desc: Swap the values at two indices in an array of person.
+    Pre: a and b are not out of bounds.
+    Post: The values are swapped.
+*/
 void swap(person* people, int a, int b) {
     person tmp = people[a];
     people[a] = people[b];
     people[b] = tmp;
 }
 
-// Bubble sort
+/*
+    Desc: Highly inefficient bubble sort.
+    Pre: people points to an array of length n.
+    Post: The same array is sorted.
+*/
 void sort(person* people, int n) {
     /* Sort the given array of people by age, of length n */
     bool swapped = false;
@@ -41,7 +50,11 @@ void sort(person* people, int n) {
 
 /*This function can be identical to the previous sort function, however it needs to return the total number of comparisons carried out in the sort.
 If you want to attempt to optimize the sort, then you are welcome to do so */
-
+/*
+    Desc: Sort the array but also count the comparisons performed.
+    Pre: people points to an array of length n.
+    Post: The same array is sorted and the number of comparisons is returned.
+*/
 int sortAnalysis(person* people, int n) {
     /* Sort the given array of persons of length n
 	Return the number of comparisons required to terminate the algorithm */
@@ -62,6 +75,11 @@ int sortAnalysis(person* people, int n) {
     return comp_count;
 }
 
+/*
+    Desc: Print information about each person.
+    Pre: people points to an array of length n.
+    Post: Some printf calls are performed.
+*/
 void display(person* people, int n) {
     /* Display information about the ten people in the format:
 	  Person 1: Age: X, Gender: Y
@@ -70,7 +88,7 @@ void display(person* people, int n) {
     */
     int i;
     for (i = 0; i < n; i++) {
-        printf("Person %d: Age: %d, Gender: %c\n", i, 
+        printf("Person %d: Age: %d, Gender: %c\n", i,
             people[i].age, people[i].sex);
     }
 }
@@ -96,17 +114,17 @@ int main() {
     /*Pass this array along with n to the display() function.*/
     display(people, n);
     printf("---------------------- \n");
-	
+
     /*Pass this array along with n to the sort() function.*/
     sort(people, n);
 
     /*Pass this array along with n to the display() function.*/
     display(people, n);
     printf("---------------------- \n");
-    
+
     /*Pass this array along with n to the sortAnalysis() function.*/
     printf("%d\n", sortAnalysis(people, n));
-    
+
     /*Display the number of comparisons the function returns.	Did it matter that the array was already sorted? Why? - Display your answer in comments below
     Note - this will depend on your implementation. There is not one answer*/
     printf("---------------------- \n");
