@@ -175,7 +175,7 @@ void removeAtDynArr(DynArr *d, int pos) {
         if (d == NULL || d->size == 0
             || pos < 0 || pos >= d->size) {
             return;
-        } 
+        }
         int i;
         for (i = 0; i < d->size - 1; i++) {
             if (i >= pos) {
@@ -194,7 +194,7 @@ void removeAtDynArr(DynArr *d, int pos) {
 	ret: 1 if empty, otherwise 0
 */
 int isEmptyDynArr(DynArr *d) {
-	return d->size == 0 ? 1 : 0;	
+	return d->size == 0 ? 1 : 0;
 }
 
 /* 	pushDynArr: push an element onto the top of the stack
@@ -251,7 +251,7 @@ int containsDynArr(DynArr *d, TYPE val) {
 	for (i = 0; i < d->size; i++) {
 	    contains |= d->data[i] == val;
 	}
-        
+
 	/* FIXME:  You will change this return value */
         return contains;
 }
@@ -268,7 +268,7 @@ void removeDynArr(DynArr *d, TYPE val) {
 	/* FIXME: You will write this function */
         if (d == NULL || d->size == 0) {
             return;
-        } 
+        }
 
         int i;
         bool removed = false;
