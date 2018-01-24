@@ -97,7 +97,6 @@ int sizeDynArr(DynArr *d) {
 	post: val is in the last utilized position in the array
 */
 void addDynArr(DynArr *d, TYPE val) {
-	/* FIXME: You will write this function */
 	if (d == NULL) {
 	    return;
 	}
@@ -116,7 +115,6 @@ void addDynArr(DynArr *d, TYPE val) {
 	    d->data[d->size] = val;
             d->size += 1;
         }
-        printf("new size is %d, new cap is %d\n", d->size, d->capacity);
 }
 
 /*	getDynArr: get an element from the dynamic array from a specified position
@@ -155,7 +153,6 @@ void putDynArr(DynArr *d, int pos, TYPE val) {
 	post: index i now holds the value at j and index j now holds the value at i
 */
 void swapDynArr(DynArr *d, int i, int j) {
-	/* FIXME: You will write this function */
         TYPE tmp = d->data[i];
         d->data[i] = d->data[j];
         d->data[j] = tmp;
@@ -242,7 +239,6 @@ TYPE peekDynArr(DynArr *d) {
 	post: no changes to the bag
 */
 int containsDynArr(DynArr *d, TYPE val) {
-	/* FIXME: You will write this function */
         if (d == NULL || d->size == 0) {
             return false;
         }
@@ -252,7 +248,6 @@ int containsDynArr(DynArr *d, TYPE val) {
 	    contains |= d->data[i] == val;
 	}
 
-	/* FIXME:  You will change this return value */
         return contains;
 }
 
@@ -265,7 +260,6 @@ int containsDynArr(DynArr *d, TYPE val) {
 	post: size of the bag is reduced by 1
 */
 void removeDynArr(DynArr *d, TYPE val) {
-	/* FIXME: You will write this function */
         if (d == NULL || d->size == 0) {
             return;
         }
