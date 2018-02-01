@@ -11,6 +11,7 @@
 	Sentinel points to the head and tail of the list
 */
 void initDeque (struct Deque *q) {
+	assert(q != NULL);
 	q->Sentinel = malloc(sizeof(struct DLink));
 	q->Sentinel->next = q->Sentinel;
 	q->Sentinel->prev = q->Sentinel;
@@ -25,14 +26,13 @@ void initDeque (struct Deque *q) {
 	post: a link storing val is added to the back of the deque
 */
 void addBackDeque (struct Deque *q, TYPE val) {
-	/* FIX ME*/
+	assert(q != NULL);
 	struct DLink* new = malloc(sizeof(struct DLink));
 	new->value = val;
 	new->next = q->Sentinel;
 	new->prev = q->Sentinel->prev;
 	q->Sentinel->prev->next = new;
 	q->Sentinel->prev = new;
-        // Some fourth link?
 }
 
 /*
@@ -43,7 +43,13 @@ void addBackDeque (struct Deque *q, TYPE val) {
 	post: a link storing val is added to the front of the deque
 */
 void addFrontDeque(struct Deque *q, TYPE val) {
-	/* FIX ME*/
+	assert(q != NULL);
+	struct DLink* new = malloc(sizeof(struct DLink));
+	new->value = val;
+	new->prev = q->Sentinel;
+	new->next = q->Sentinel->next;
+	q->Sentinel->next->prev = new;
+	q->Sentinel->next = new;
 }
 
 /*
@@ -53,6 +59,7 @@ void addFrontDeque(struct Deque *q, TYPE val) {
 	ret: 1 if the deque is empty. Otherwise, 0.
 */
 int isEmptyDeque(struct Deque *q) {
+	assert(q != NULL);
 	// Does the sentinel point to its own address?
 	return q->Sentinel->next == q->Sentinel;
 }
@@ -65,6 +72,7 @@ int isEmptyDeque(struct Deque *q) {
 	ret: value of the front of the deque
 */
 TYPE frontDeque(struct Deque *q) {
+	assert(!isEmptyDeque(q) && q != NULL);
 	return q->Sentinel->next->value;
 }
 
@@ -76,6 +84,7 @@ TYPE frontDeque(struct Deque *q) {
 	ret: value of the back of the deque
 */
 TYPE backDeque(struct Deque *q) {
+	assert(!isEmptyDeque(q) && q != NULL);
 	return q->Sentinel->prev->value;
 }
 
@@ -86,6 +95,7 @@ TYPE backDeque(struct Deque *q) {
 	post: the links in the deque are printed from front to back
 */
 void printDeque(struct Deque *q) {
+	assert(!isEmptyDeque(q) && q != NULL);
 	struct DLink* sentinel = q->Sentinel;
 	struct DLink* elem = sentinel->next;
 	printf("[");
@@ -103,8 +113,6 @@ void printDeque(struct Deque *q) {
 	post: the front is removed from the deque
 */
 void removeFrontDeque (struct Deque *q) {
-	/* FIX ME*/
-	
 	
 }
 
@@ -116,8 +124,6 @@ void removeFrontDeque (struct Deque *q) {
 	post: the back is removed from the deque
 */
 void removeBackDeque(struct Deque *q) {
-	/* FIX ME*/
-	
 	
 }
 
