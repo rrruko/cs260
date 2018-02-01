@@ -40,7 +40,6 @@ void addFrontList (struct DLink *head, TYPE e) {
 	post: value is added to the back of the list
 */
 void addBackList(struct DLink *head, TYPE e) {
-	/* FIX ME*/
 	struct DLink* elem = head;
 	while (elem->next != NULL) {
 		elem = elem->next;
@@ -59,7 +58,6 @@ void addBackList(struct DLink *head, TYPE e) {
 	return: return value at front of the list
 */
 TYPE frontList (struct DLink *head) {
-	/* FIX ME*/
 	assert(head != NULL);
 	return head->next->value;
 }
@@ -72,7 +70,6 @@ TYPE frontList (struct DLink *head) {
 	return: return value at back of the list
 */
 TYPE backListRecursive (struct DLink *head) {
-	/* FIX ME*/
 	if (head->next != NULL) {
 		return backListRecursive(head->next);
 	} else {
@@ -87,7 +84,6 @@ TYPE backListRecursive (struct DLink *head) {
 	post: front link is removed
 */
 void removeFrontList(struct DLink *head) {
-	/* FIX ME*/
 	assert(head != NULL);	
 	struct DLink* tmp = head->next;
 	head->next = head->next->next;
@@ -101,7 +97,6 @@ void removeFrontList(struct DLink *head) {
 	post: back link is removed
 */
 void removeBackList (struct DLink *head) {
-	/* FIX ME*/
 	assert(head != NULL);
 	if (head->next != NULL) {
 		struct DLink* elem = head->next;
@@ -139,7 +134,6 @@ void displayList (struct DLink *head) {
 	return: Return 1 if found, 0 if not
  */
 int listContainsRecursive (struct DLink *head, TYPE e) {
-	/* FIX ME */
 	assert(head != NULL);
 	if (head->next == NULL) {
 		return head->value == e;
@@ -157,7 +151,6 @@ int listContainsRecursive (struct DLink *head, TYPE e) {
 	post: first occurrence of e has been removed from the list
 */
 void listRemove (struct DLink *head, TYPE e) {
-	/* FIX ME*/
 	assert(head != NULL);
 	struct DLink* elem = head;
 	while (elem->next != NULL) {
@@ -194,7 +187,6 @@ int isEmptyList(struct DLink *head) {
 	post: each link of the list has been deallocated
 */
 void freeList(struct list *lst) {
-	/* FIX ME*/
 	struct DLink* head = lst->head;
 	assert(head != NULL);
 	struct DLink* elem = head->next;
@@ -245,10 +237,11 @@ void addToBag(struct bag* b, TYPE val) {
 	post: Element (if found) removed from bag size is decremented.
 */
 void removeFromBag(struct bag* b, TYPE val) {
-	/*FIX ME*/
-	
-	
-	
+	assert(b != NULL);
+	if (listContainsRecursive(b->list)) {
+		listRemove(b->lst->head, val);
+		b->size--;
+	}
 }
 
 /*
@@ -260,7 +253,7 @@ void removeFromBag(struct bag* b, TYPE val) {
 	return: return 1 if found, otherwise return 0
 */
 int bagContains(struct bag* b, TYPE val) {
-	/* FIX ME*/
+	assert(b != NULL);
 	return listContainsRecursive(b->lst->head, val);
 }
 
@@ -272,7 +265,7 @@ int bagContains(struct bag* b, TYPE val) {
 	return: return 1 if found, otherwise return 0
 */
 int isEmptyBag(struct bag* b) {
-	/* FIX ME*/
+	assert(b != NULL);
 	return isEmptyList(b->lst->head);
 }
 
@@ -283,7 +276,6 @@ int isEmptyBag(struct bag* b) {
 	post: bag is deallocated
 */
 void freeBag(struct bag *b) {
-	/* FIX ME*/
-	
-	
+	assert(b != NULL);
+	freeList(b->lst);
 }
