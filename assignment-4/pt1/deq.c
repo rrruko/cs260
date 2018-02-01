@@ -113,7 +113,11 @@ void printDeque(struct Deque *q) {
 	post: the front is removed from the deque
 */
 void removeFrontDeque (struct Deque *q) {
-	
+	assert(!isEmptyDeque(q) && q != NULL);
+	struct DLink* rm = q->Sentinel->next;
+	q->Sentinel->next = rm->next;
+	q->Sentinel->next->prev = q->Sentinel;
+	free(rm);
 }
 
 
@@ -124,7 +128,11 @@ void removeFrontDeque (struct Deque *q) {
 	post: the back is removed from the deque
 */
 void removeBackDeque(struct Deque *q) {
-	
+	assert(!isEmptyDeque(q) && q != NULL);
+	struct DLink* rm = q->Sentinel->prev;
+	q->Sentinel->prev = rm->prev;
+	q->Sentinel->prev->next = q->Sentinel;
+	free(rm);
 }
 
 
@@ -135,6 +143,13 @@ void removeBackDeque(struct Deque *q) {
 	post: all links (including backSentinel) are de-allocated
 */
 void freeDeque(struct Deque *q) {
-	/* FIX ME*/
-	
+	assert(!isEmptyDeque(q) && q != NULL);
+	struct DLink* sentinel = q->Sentinel;
+	struct DLink* elem = sentinel->next;
+	while (elem != sentinel) {
+		struct DLink* nxt = elem->next;
+		free(elem);
+		elem = nxt;
+	}
+	free(sentinel);
 }
