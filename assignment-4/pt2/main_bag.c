@@ -74,7 +74,7 @@ int main() {
     /* Should display 2, 4*/
     displayList(lst->head);
 
-    free(lst->head);
+    freeList(lst);
 
     printf("----------------- ******** testing listBag ******** ----------------- \n");
 

@@ -88,9 +88,10 @@ TYPE backListRecursive (struct DLink *head) {
 */
 void removeFrontList(struct DLink *head) {
 	/* FIX ME*/
-	
-	
-	
+	assert(head != NULL);	
+	struct DLink* tmp = head->next;
+	head->next = head->next->next;
+	free(tmp);
 }
 
 /*
@@ -101,8 +102,16 @@ void removeFrontList(struct DLink *head) {
 */
 void removeBackList (struct DLink *head) {
 	/* FIX ME*/
-	
-	
+	assert(head != NULL);
+	if (head->next != NULL) {
+		struct DLink* elem = head->next;
+		if (elem->next == NULL) {
+			head->next = NULL;
+			free(elem);
+		} else {
+			removeBackList(elem);
+		}
+	}	
 }
 
 /*
@@ -131,9 +140,12 @@ void displayList (struct DLink *head) {
  */
 int listContainsRecursive (struct DLink *head, TYPE e) {
 	/* FIX ME */
-	
-	
-	return 0;
+	assert(head != NULL);
+	if (head->next == NULL) {
+		return head->value == e;
+	} else {
+		return head->value == e || listContainsRecursive(head->next, e);
+	}
 }
 
 /*
@@ -146,8 +158,18 @@ int listContainsRecursive (struct DLink *head, TYPE e) {
 */
 void listRemove (struct DLink *head, TYPE e) {
 	/* FIX ME*/
-	
-	
+	assert(head != NULL);
+	struct DLink* elem = head;
+	while (elem->next != NULL) {
+		if (elem->next->value == e) {
+			struct DLink* tmp = elem->next;
+			elem->next = elem->next->next;
+			free(tmp);
+			break;
+		} else {
+			elem = elem->next;
+		}
+	}
 }
 
 /*
@@ -173,8 +195,17 @@ int isEmptyList(struct DLink *head) {
 */
 void freeList(struct list *lst) {
 	/* FIX ME*/
-	
-	
+	struct DLink* head = lst->head;
+	assert(head != NULL);
+	struct DLink* elem = head->next;
+	while (elem != NULL) {
+		printf("Freeing %d\n", elem->value);
+		struct DLink* nxt = elem->next;
+		free(elem);
+		elem = nxt;
+	}
+	free(head);
+	free(lst);
 }
 
 
@@ -230,9 +261,7 @@ void removeFromBag(struct bag* b, TYPE val) {
 */
 int bagContains(struct bag* b, TYPE val) {
 	/* FIX ME*/
-	
-	
-	return 0;
+	return listContainsRecursive(b->lst->head, val);
 }
 
 /*
@@ -244,9 +273,7 @@ int bagContains(struct bag* b, TYPE val) {
 */
 int isEmptyBag(struct bag* b) {
 	/* FIX ME*/
-	
-	
-	return 0;
+	return isEmptyList(b->lst->head);
 }
 
 /*
@@ -257,7 +284,6 @@ int isEmptyBag(struct bag* b) {
 */
 void freeBag(struct bag *b) {
 	/* FIX ME*/
-	
 	
 	
 }
