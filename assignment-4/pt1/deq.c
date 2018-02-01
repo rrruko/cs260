@@ -26,8 +26,13 @@ void initDeque (struct Deque *q) {
 */
 void addBackDeque (struct Deque *q, TYPE val) {
 	/* FIX ME*/
-	
-	
+	struct DLink* new = malloc(sizeof(struct DLink));
+	new->value = val;
+	new->next = q->Sentinel;
+	new->prev = q->Sentinel->prev;
+	q->Sentinel->prev->next = new;
+	q->Sentinel->prev = new;
+        // Some fourth link?
 }
 
 /*
@@ -39,8 +44,6 @@ void addBackDeque (struct Deque *q, TYPE val) {
 */
 void addFrontDeque(struct Deque *q, TYPE val) {
 	/* FIX ME*/
-	
-	
 }
 
 /*
@@ -50,9 +53,8 @@ void addFrontDeque(struct Deque *q, TYPE val) {
 	ret: 1 if the deque is empty. Otherwise, 0.
 */
 int isEmptyDeque(struct Deque *q) {
-	/* FIX ME*/
-	
-	return 0;
+	// Does the sentinel point to its own address?
+	return q->Sentinel->next == q->Sentinel;
 }
 
 /*
@@ -63,9 +65,7 @@ int isEmptyDeque(struct Deque *q) {
 	ret: value of the front of the deque
 */
 TYPE frontDeque(struct Deque *q) {
-	/* FIX ME*/
-	
-	return 0;
+	return q->Sentinel->next->value;
 }
 
 /*
@@ -76,9 +76,7 @@ TYPE frontDeque(struct Deque *q) {
 	ret: value of the back of the deque
 */
 TYPE backDeque(struct Deque *q) {
-	/* FIX ME*/
-	
-	return 0;
+	return q->Sentinel->prev->value;
 }
 
 /*
@@ -88,9 +86,14 @@ TYPE backDeque(struct Deque *q) {
 	post: the links in the deque are printed from front to back
 */
 void printDeque(struct Deque *q) {
-	/* FIX ME*/
-	
-	
+	struct DLink* sentinel = q->Sentinel;
+	struct DLink* elem = sentinel->next;
+	printf("[");
+	while (elem != sentinel) {
+		printf("%.1f ", elem->value);
+		elem = elem->next;
+	}
+	printf("]\n");
 }
 
 /*
