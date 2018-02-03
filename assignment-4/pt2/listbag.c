@@ -238,7 +238,7 @@ void addToBag(struct bag* b, TYPE val) {
 */
 void removeFromBag(struct bag* b, TYPE val) {
     assert(b != NULL);
-    if (listContainsRecursive(b->list)) {
+    if (listContainsRecursive(b->lst->head, val)) {
         listRemove(b->lst->head, val);
         b->size--;
     }

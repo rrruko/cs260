@@ -5,37 +5,38 @@
 
 
 void assertTrue(int predicate, char *message) {
-	printf("%s: ", message);
-	if (predicate)
-		printf("Pass \n");
-	else
-		printf("Fail \n");
+    printf("%s: ", message);
+    if (predicate) {
+        printf("Pass \n");
+    } else {
+        printf("Fail \n");
+    }
 }
 
 
 int main() {
 
-	struct list *lst = malloc(sizeof(struct list));
-	initList(lst);
-	printf("Initialized List \n");
+    struct list *lst = malloc(sizeof(struct list));
+    initList(lst);
+    printf("Initialized List \n");
 
-	printf("---------testing addFrontList---------- \n");
-	addFrontList(lst->head, 3);
-	addFrontList(lst->head, 2);
-	addFrontList(lst->head, 1);
+    printf("---------testing addFrontList---------- \n");
+    addFrontList(lst->head, 3);
+    addFrontList(lst->head, 2);
+    addFrontList(lst->head, 1);
 
-	printf("displaying list: ");
-	/* Should display 1, 2, 3 */
-	displayList(lst->head);
+    printf("displaying list: ");
+    /* Should display 1, 2, 3 */
+    displayList(lst->head);
 
-	assertTrue(frontList(lst->head) == 1, "Testing head == 1 ");
+    assertTrue(frontList(lst->head) == 1, "Testing head == 1 ");
 
-	printf("---------testing addBackList---------- \n");
-	addBackList(lst->head, 4);
-	addBackList(lst->head, 5);
+    printf("---------testing addBackList---------- \n");
+    addBackList(lst->head, 4);
+    addBackList(lst->head, 5);
 
-	printf("displaying list: ");
-	/* Should display 1, 2, 3, 4, 5*/
+    printf("displaying list: ");
+    /* Should display 1, 2, 3, 4, 5*/
     displayList(lst->head);
 
     assertTrue(frontList(lst->head) == 1, "Testing head == 1 ");
@@ -79,20 +80,29 @@ int main() {
     printf("----------------- ******** testing listBag ******** ----------------- \n");
 
     struct bag *b = malloc(sizeof(struct list));
-	initBag(b);
+    initBag(b);
 
-	printf("---------testing addToBag---------- \n");
-	addToBag(b, 1);
-	addToBag(b, 2);
-	addToBag(b, 3);
+    printf("---------testing addToBag---------- \n");
+    printf("Adding 1, 2, and 3\n");
+    addToBag(b, 1);
+    addToBag(b, 2);
+    addToBag(b, 3);
 
     printf("---------testing bagContains---------- \n");
-	assertTrue(bagContains(b, 3), "Testing bagContains 3");
-	assertTrue(!bagContains(b, 4), "Testing bagContains 4");
+    assertTrue(bagContains(b, 3), "Testing bagContains 3");
+    assertTrue(!bagContains(b, 4), "Testing bagContains 4");
 
     printf("---------testing isEmptyBag---------- \n");
-	assertTrue(!isEmptyBag(b), "Testing isEmpty ");
+    assertTrue(!isEmptyBag(b), "Testing !isEmpty");
 
+    printf("---------testing removeFromBag---------- \n");
 
-	return 0;
+    printf("Removing 1, 2, and 3\n");
+    removeFromBag(b, 1);
+    removeFromBag(b, 2);
+    removeFromBag(b, 3);
+
+    assertTrue(isEmptyBag(b), "Testing isEmpty");
+
+    return 0;
 }
