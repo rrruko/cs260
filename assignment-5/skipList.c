@@ -208,9 +208,9 @@ void printLv(struct skipList *list, int lv) {
 int getSize(struct skipList *list) {
     int size = 0;
     struct sLink* link = list->sentinel;
-    while (link->next != NULL) {
+    while (link->next[1] != NULL) {
         size++;
-        link = link->next[0];
+        link = link->next[1];
     }
     return size;
 }
@@ -225,10 +225,46 @@ int getSize(struct skipList *list) {
     post: if not found "Not Found" is displayed via standard output
 */
 void removeLink(struct skipList *list, TYPE val) {
-    /* FIX ME */
-
-
-
+    struct sLink* curr = list->sentinel;
+    int lvl = list->currMax;
+    while (lvl > 0) {
+        while (curr->next[lvl] == list->sentinel) {
+            lvl--;
+            if (lvl < 1) {
+                printf("Not Found\n");
+                return;
+            }
+        }
+        if (curr->next[lvl]->value == val) {
+            if (lvl > 1) {
+                printf("hee\n");
+                curr->next[lvl] = curr->next[lvl]->next[lvl];
+                lvl--;
+            } else {
+                printf("ho\n");
+                struct sLink* rm = curr->next[lvl];
+                curr->next[lvl] = rm->next[lvl];
+                free(rm);
+                return;
+            }
+            /*struct sLink* rm = curr->next[lvl];
+            int i;
+            for (i = rm->level; i > 0; i--) {
+                if (curr->next[i] == rm) {
+                    curr->next[i] = rm->next[i];
+                }
+            }
+            free(rm);
+            return;*/
+        } else if (curr->next[lvl]->value > val) {
+            lvl--;
+        } else if (lvl >= 1) {
+            curr = curr->next[lvl];
+        } else {
+            printf("Not Found\n");
+            return;
+        }
+    }
 }
 
 /*
