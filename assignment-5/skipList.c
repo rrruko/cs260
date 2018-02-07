@@ -152,30 +152,28 @@ void addVal(struct skipList *list, TYPE val) {
     work as boolean return)
 */
 int searchVal(struct skipList *list, TYPE val) {
-    // Bad, inefficient temporary implementation that doesn't even make use of
-    // the data structure!
-    // You can optimize this by traversing the list, dropping down a level
-    // whenever the next node is greater than val, and stopping when you
-    // reach the end or when val tries to go to zero.
-    int lev;
-    for (lev = list->currMax; lev > 0; lev--) {
-        struct sLink* curr = list->sentinel;
-        while (curr->next[lev] != list->sentinel) {
-            if (curr->next[lev]->value == val) {
-                return 1;
+    int lev = list->currMax;
+    int comparisons = 0;
+    struct sLink* curr = list->sentinel;
+    while (1) {
+        comparisons++;
+        while (curr->next[lev] == list->sentinel 
+            || curr->next[lev]->value > val) {
+            if (lev > 1) {
+                lev--;
+            } else {
+                return 0;
             }
+            comparisons++;
+        }
+        comparisons++;
+        if (curr->next[lev]->value == val) {
+            return comparisons;
+        } else {
             curr = curr->next[lev];
         }
     }
-    return 0;
 }
-
-/*
-
-
-
-
-*/
 
 /*
     printLv: Print the specified level of the list
