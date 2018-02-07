@@ -262,7 +262,13 @@ void removeLink(struct skipList *list, TYPE val) {
     post: sLinks are deallocated
 */
 void deleteList(struct skipList *list) {
-    /* FIX ME */
-
-
+    assert(list != NULL);
+    struct sLink* curr = list->sentinel;
+    while (curr->next[1] != list->sentinel) {
+        struct sLink* next = curr->next[1];
+        free(curr);
+        curr = next;
+    }
+    free(curr);
+    free(list);
 }
