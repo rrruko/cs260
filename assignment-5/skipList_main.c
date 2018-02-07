@@ -64,6 +64,8 @@ void staticTest(struct skipList *list) {
 	removeLink(list, 2);
 	printf("Removing 5 from list \n");
 	removeLink(list, 5);
+        printf("Removing 5 from list \n");
+	removeLink(list, 5);
 
 	printf("\n-------------- Testing printLv --------------\n");
 	printLv(list, 1);

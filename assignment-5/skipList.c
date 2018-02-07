@@ -237,34 +237,21 @@ void removeLink(struct skipList *list, TYPE val) {
         }
         if (curr->next[lvl]->value == val) {
             if (lvl > 1) {
-                printf("hee\n");
                 curr->next[lvl] = curr->next[lvl]->next[lvl];
                 lvl--;
             } else {
-                printf("ho\n");
                 struct sLink* rm = curr->next[lvl];
                 curr->next[lvl] = rm->next[lvl];
                 free(rm);
                 return;
             }
-            /*struct sLink* rm = curr->next[lvl];
-            int i;
-            for (i = rm->level; i > 0; i--) {
-                if (curr->next[i] == rm) {
-                    curr->next[i] = rm->next[i];
-                }
-            }
-            free(rm);
-            return;*/
         } else if (curr->next[lvl]->value > val) {
             lvl--;
-        } else if (lvl >= 1) {
+        } else if (lvl > 0) {
             curr = curr->next[lvl];
-        } else {
-            printf("Not Found\n");
-            return;
         }
     }
+    printf("Not Found\n");
 }
 
 /*
