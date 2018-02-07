@@ -157,7 +157,7 @@ int searchVal(struct skipList *list, TYPE val) {
     struct sLink* curr = list->sentinel;
     while (1) {
         comparisons++;
-        while (curr->next[lev] == list->sentinel 
+        while (curr->next[lev] == list->sentinel
             || curr->next[lev]->value > val) {
             if (lev > 1) {
                 lev--;
