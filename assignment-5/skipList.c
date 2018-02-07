@@ -31,9 +31,9 @@ void initSkipList(struct skipList *list, int max) {
     list->maxLevel = max;/* max allowable levels */
     list->currMax = 0;/* level of highest node currently */
     list->size = 0;/* number of level 1 links */
-    
+
     int i;
-    for(i = max; i > 0; i--) 
+    for(i = max; i > 0; i--)
     {
         /* sentinel points to itself at every level */
         list->sentinel->next[i] = list->sentinel;
@@ -67,7 +67,7 @@ int levelGen(struct skipList *list) {
      *  chance that the log of its reciprocal is greater than n.
      */
     int level = 1;
-    // Side-affecting loop condition! 
+    // Side-affecting loop condition!
     while (rand() % 2 == 0
         && level < list->maxLevel
         && level < list->currMax + 1) {
@@ -89,40 +89,41 @@ int levelGen(struct skipList *list) {
 void addValTest(struct skipList *list, TYPE val, int lvl) {
     assert(list != NULL);
     assert(lvl <= list->maxLevel && lvl > 0);
-    
+
     /* if lvl is greater than currMax, set currMax to lvl - this is just list
      * maintenance */
     if(lvl > list->currMax) {
         list->currMax = lvl;
     }
-    
+
     /* pointers for node to insert and iterator node */
     struct sLink *insert, *curr;
-    /* allocate memory for link to insert - extra space is allocated for the 
+    /* allocate memory for link to insert - extra space is allocated for the
      * "height" of the link */
     insert = malloc(sizeof(struct sLink) + sizeof(struct sLink)*lvl);
-    
+
     /* set up node values*/
     insert->value = val;
     insert->level = lvl;
-    
+
     /* initialize curr to sentinel - start at the head of the list */
     curr = list->sentinel;
 
-    while (insert->value > curr->next->value) {
-        curr = curr->next;
-    }
-    // curr is now the first node such that curr->next->value is not less than
-    // insert->value, so we should put insert after curr and before curr->next
-
-    
-    /* FIX ME */
-    /* add insert to the correct position for each level of the skip list less
-     * or equal to the link's level */
-    /* HINT - this is simply a test function - don't hesitate to put debugging
-     * statements in to help navigate */
-    /* Start at the top and work down */
     printf("inserting %d as a lvl %d node\n", val, lvl);
+    /* For each level, traverse until you find the pair of nodes to link into */
+    int lev;
+    for (lev = lvl; lev > 0; lev--) {
+        while (insert->value > curr->next[lev]->value && curr->next[lev] != list->sentinel) {
+            printf("wh\n");
+            curr = curr->next[lev];
+        }
+        printf("linking %d after %d at level %d\n", val, curr->value, lev);
+        // curr is now the first node such that curr->next->value is not less than
+        // insert->value, so we should put insert after curr and before curr->next
+        struct sLink* curNext = curr->next[lev];
+        curr->next[lev] = insert;
+        insert->next[lev] = curNext;
+    }
 }
 
 /*
@@ -131,16 +132,14 @@ void addValTest(struct skipList *list, TYPE val, int lvl) {
     pre: lvl > 0 and lvl <= maxLevel
     param1: list - the list
     param2: val - the value to add
-    post: value is added to the skip list at each necessary level. 
+    post: value is added to the skip list at each necessary level.
     Level is generated randomly.
-    HINT - this is the same process as addValTest with one exception. You 
+    HINT - this is the same process as addValTest with one exception. You
     need to generate a level using LevelGen()
 */
 void addVal(struct skipList *list, TYPE val) {
-    /* FIX ME */
-    
-    
-    
+    int lev = levelGen(list);
+    addValTest(list, val, lev);
 }
 
 /*
@@ -153,12 +152,30 @@ void addVal(struct skipList *list, TYPE val) {
     work as boolean return)
 */
 int searchVal(struct skipList *list, TYPE val) {
-    /* FIX ME */
-    /* HINT - traversing the list is similar to the an insert */
-    
-    
+    // Bad, inefficient temporary implementation that doesn't even make use of
+    // the data structure!
+    // You can optimize this by traversing the list, dropping down a level
+    // whenever the next node is greater than val, and stopping when you
+    // reach the end or when val tries to go to zero.
+    int lev;
+    for (lev = list->currMax; lev > 0; lev--) {
+        struct sLink* curr = list->sentinel;
+        while (curr->next[lev] != list->sentinel) {
+            if (curr->next[lev]->value == val) {
+                return 1;
+            }
+            curr = curr->next[lev];
+        }
+    }
     return 0;
 }
+
+/*
+
+
+
+
+*/
 
 /*
     printLv: Print the specified level of the list
@@ -169,10 +186,12 @@ int searchVal(struct skipList *list, TYPE val) {
     post: prints all of the values at a specified level
 */
 void printLv(struct skipList *list, int lv) {
-    /* FIX ME */
-    
-    
-    
+    struct sLink* curr = list->sentinel;
+    while (curr->next[lv] != list->sentinel) {
+        printf("%d ", curr->next[lv]->value);
+        curr = curr->next[lv];
+    }
+    printf("\n");
 }
 
 /*
@@ -202,9 +221,9 @@ int getSize(struct skipList *list) {
 */
 void removeLink(struct skipList *list, TYPE val) {
     /* FIX ME */
-    
-    
-    
+
+
+
 }
 
 /*
@@ -216,6 +235,6 @@ void removeLink(struct skipList *list, TYPE val) {
 */
 void deleteList(struct skipList *list) {
     /* FIX ME */
-    
-    
+
+
 }

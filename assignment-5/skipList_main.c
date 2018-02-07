@@ -7,19 +7,19 @@ int main() {
 	struct skipList *list;
 	list = malloc(sizeof(struct skipList) + sizeof(struct sLink)*cap);
 	initSkipList(list, cap);
-	
+
 	printf("\n-------*****------- Static Test -------*****-------\n");
 	staticTest(list);
-	
+
 	/* initialize list two - max depth 8  - comment & un-comment the test function accordingly*/
 	cap = 8;
 	struct skipList *list2;
 	list2 = malloc(sizeof(struct skipList) + sizeof(struct sLink)*cap+1);
 	initSkipList(list2, cap);
-	
+
 	printf("\n-------*****------- Dynamic Test -------*****-------\n");
 	test(list2);
-	
+
 	return 0;
 }
 
@@ -43,7 +43,7 @@ void staticTest(struct skipList *list) {
 	addValTest(list, 8, 3);
 	addValTest(list, 15, 3);
 	addValTest(list, 13, 1);
-	
+
 	printf("\n-------------- Testing printLv --------------\n");
 	printLv(list, 1);
 	/* should display: 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 15 */
@@ -53,25 +53,25 @@ void staticTest(struct skipList *list) {
 	/* should display: 8, 9, 15 */
 	printLv(list, 4);
 	/* should display: 9 */
-	
+
 	printf("\n-------------- Testing searchVal --------------\n");
 	printf("Search for 4: returned: %d \n", searchVal(list,4));
 	printf("Search for 1: returned: %d \n", searchVal(list,1));
 	printf("Search for 15: returned: %d \n", searchVal(list,15));
-	
+
 	printf("\n-------------- Testing removeLink --------------\n");
 	printf("Removing 2 from list \n");
 	removeLink(list, 2);
 	printf("Removing 5 from list \n");
 	removeLink(list, 5);
-	
+
 	printf("\n-------------- Testing printLv --------------\n");
 	printLv(list, 1);
 	/* should display: 3, 4, 6, 7, 8, 9, 10, 13, 15 */
 	printLv(list, 2);
 	/* should display: 3, 8, 9, 10, 15 */
 	printf("\n-------*****------- Testing Complete -------*****-------\n");
-	
+
 }
 
 /*
@@ -83,12 +83,12 @@ void staticTest(struct skipList *list) {
 */
 void test(struct skipList *list) {
 	int i = 0;
-	
+
 	while(i < 25) {
 		addVal(list, rand()%1000);
 		i++;
 	}
-	
+
 	printLv(list, 1);
 	printLv(list, 2);
 	printLv(list, 3);
@@ -97,9 +97,13 @@ void test(struct skipList *list) {
 	printLv(list, 6);
 	printLv(list, 7);
 	printLv(list, 8);
-	
+
+        printf("currMax: %d\n", list->currMax);
+
 	printf("Search for 50: returned: %d \n", searchVal(list, 50));
 	printf("Search for 0: returned: %d \n", searchVal(list, 0));
 	printf("Search for 195: returned: %d \n", searchVal(list, 195));
+	printf("Search for 862: returned: %d \n", searchVal(list, 862));
+	printf("Search for 929: returned: %d \n", searchVal(list, 929));
 	/* Verify your own results */
 }
