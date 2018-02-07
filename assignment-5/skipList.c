@@ -110,19 +110,26 @@ void addValTest(struct skipList *list, TYPE val, int lvl) {
     curr = list->sentinel;
 
     printf("inserting %d as a lvl %d node\n", val, lvl);
-    /* For each level, traverse until you find the pair of nodes to link into */
-    int lev;
-    for (lev = lvl; lev > 0; lev--) {
-        while (insert->value > curr->next[lev]->value && curr->next[lev] != list->sentinel) {
-            printf("wh\n");
+    int lev = list->currMax;
+    while (1) {
+        while (curr->next[lev] == list->sentinel
+            || curr->next[lev]->value > val) {
+            if (lev <= lvl) {
+              struct sLink* curNext = curr->next[lev];
+              curr->next[lev] = insert;
+              insert->next[lev] = curNext;
+            }
+            if (lev > 1) {
+                lev--;
+            } else {
+                break;
+            }
+        }
+        if (curr->next[lev]->value == val) {
+            break;
+        } else {
             curr = curr->next[lev];
         }
-        printf("linking %d after %d at level %d\n", val, curr->value, lev);
-        // curr is now the first node such that curr->next->value is not less than
-        // insert->value, so we should put insert after curr and before curr->next
-        struct sLink* curNext = curr->next[lev];
-        curr->next[lev] = insert;
-        insert->next[lev] = curNext;
     }
 }
 
