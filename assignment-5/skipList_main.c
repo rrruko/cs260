@@ -106,7 +106,8 @@ void test(struct skipList *list) {
     printf("Search for 0: returned: %d \n", searchVal(list, 0));
     printf("Search for 195: returned: %d \n", searchVal(list, 195));
     printf("Search for 862: returned: %d \n", searchVal(list, 862));
-    printf("Search for 929: returned: %d \n", searchVal(list, 929));
+    printf("Search for 919: returned: %d \n", searchVal(list, 919));
+    printf("Search for 777: returned: %d \n", searchVal(list, 777));
     free(list);
     /* Verify your own results */
 }
