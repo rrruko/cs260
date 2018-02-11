@@ -145,6 +145,7 @@ void addValTest(struct skipList *list, TYPE val, int lvl) {
     need to generate a level using LevelGen()
 */
 void addVal(struct skipList *list, TYPE val) {
+    // Preconditions are already guaranteed by levelGen and addValTest
     int lev = levelGen(list);
     addValTest(list, val, lev);
 }
@@ -159,11 +160,11 @@ void addVal(struct skipList *list, TYPE val) {
     work as boolean return)
 */
 int searchVal(struct skipList *list, TYPE val) {
+    assert(list != NULL);
     int lev = list->currMax;
     int comparisons = 0;
     struct sLink* curr = list->sentinel;
     while (1) {
-        comparisons++;
         while (curr->next[lev] == list->sentinel
             || curr->next[lev]->value > val) {
             if (lev > 1) {
@@ -171,13 +172,12 @@ int searchVal(struct skipList *list, TYPE val) {
             } else {
                 return 0;
             }
-            comparisons++;
         }
-        comparisons++;
         if (curr->next[lev]->value == val) {
             return comparisons;
         } else {
             curr = curr->next[lev];
+            comparisons++;
         }
     }
 }
@@ -191,6 +191,8 @@ int searchVal(struct skipList *list, TYPE val) {
     post: prints all of the values at a specified level
 */
 void printLv(struct skipList *list, int lv) {
+    assert(list != NULL);
+    assert(lv > 0 && lv <= list->maxLevel);
     struct sLink* curr = list->sentinel;
     while (curr->next[lv] != list->sentinel) {
         printf("%d ", curr->next[lv]->value);
@@ -206,6 +208,7 @@ void printLv(struct skipList *list, int lv) {
     post: return the number of level 1 links in the list
 */
 int getSize(struct skipList *list) {
+    assert(list != NULL);
     int size = 0;
     struct sLink* link = list->sentinel;
     while (link->next[1] != NULL) {
@@ -225,6 +228,7 @@ int getSize(struct skipList *list) {
     post: if not found "Not Found" is displayed via standard output
 */
 void removeLink(struct skipList *list, TYPE val) {
+    assert(list != NULL);
     struct sLink* curr = list->sentinel;
     int lvl = list->currMax;
     while (lvl > 0) {
