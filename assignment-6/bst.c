@@ -125,7 +125,16 @@ int sizeBSTree(struct BSTree *tree) {
  */
 void addBSTree(struct BSTree *tree, TYPE val) {
     printf("Adding %.1f \n", val);
-    tree->root = _addNode(tree->root, val);
+    if (tree->root == NULL) {
+        printf("Null root\n");
+        struct Node* new = malloc(sizeof(struct Node));
+        new->left = NULL;
+        new->right = NULL;
+        new->val = val;
+        tree->root = new;
+    } else {
+        tree->root = _addNode(tree->root, val);
+    }
     tree->cnt++;
 }
 
@@ -137,23 +146,25 @@ void addBSTree(struct BSTree *tree, TYPE val) {
     post: tree now contains val
  */
 struct Node *_addNode(struct Node *curr, TYPE val) {
-    assert(curr != NULL);
-
     if (val < curr->val) {
         if (curr->left == NULL) {
             struct Node* new = malloc(sizeof(struct Node));
+            new->left = NULL;
+            new->right = NULL;
+            new->val = val;
             curr->left = new;
         } else {
-            printf("Descending left\n");
-            curr = _addNode(curr->left, val);
+            curr->left = _addNode(curr->left, val);
         }
     } else if (val > curr->val) {
         if (curr->right == NULL) {
             struct Node* new = malloc(sizeof(struct Node));
+            new->left = NULL;
+            new->right = NULL;
+            new->val = val;
             curr->right = new;
         } else {
-            printf("Descending right\n");
-            curr = _addNode(curr->right, val);
+            curr->right = _addNode(curr->right, val);
         }
     }
 
@@ -161,7 +172,7 @@ struct Node *_addNode(struct Node *curr, TYPE val) {
 }
 
 /*
-    containsBSTree: function to determine if the binary search tree contains an element - calls _contains
+    containsBSTree: function to determine if the binary search tree contains an element - calls _containsNode
     param1: tree the binary search tree
     param2: val    - the value to search for in the tree
     pre: tree is not null
@@ -173,7 +184,7 @@ int containsBSTree(struct BSTree *tree, TYPE val) {
 }
 
 /*
-    _contains: function checks for for the value in a binary search tree
+    _containsNode: function checks for for the value in a binary search tree
     param1: curr - the current node
     param2: val    - the value to be removed from the tree
     pre: curr is not null
@@ -189,7 +200,7 @@ int _containsNode(struct Node *curr, TYPE val) {
 
 
 /*
-    removeBSTree: function to remove a value from the binary search tree - calls _removeNode
+    removeNodeFromTree: function to remove a value from the binary search tree - calls _removeNode
     param1: tree - the binary search tree
     param2: val    - the value to be removed from the tree
     pre: tree is not null
@@ -223,7 +234,7 @@ struct Node *_removeNode(struct Node *curr, TYPE val) {
 }
 
 /*
-    leftMostValue: helper function to find the left most child of a node - iterative implementation
+    _leftMostValue: helper function to find the left most child of a node - iterative implementation
     param: curr the current node
     pre: curr is not null
     post: return the value of the left most child of curr
