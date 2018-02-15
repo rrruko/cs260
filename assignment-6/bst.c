@@ -7,7 +7,8 @@
 #include "bst.h"
 
 /*
-    compareValues: function returns an integer to tell you if the left value is greater then, less then, or equal to the right value.
+    compareValues: function returns an integer to tell you if the left value is
+    greater then, less then, or equal to the right value.
     used to compare node values
     pre: none
     post: none
@@ -171,7 +172,8 @@ struct Node *_addNode(struct Node *curr, TYPE val) {
 }
 
 /*
-    containsBSTree: function to determine if the binary search tree contains an element - calls _containsNode
+    containsBSTree: function to determine if the binary search tree contains an
+    element - calls _containsNode
     param1: tree the binary search tree
     param2: val    - the value to search for in the tree
     pre: tree is not null
@@ -222,8 +224,9 @@ void removeNodeFromTree(struct BSTree *tree, TYPE val) {
     pre: val is in the tree
     pre: curr is not null
     post: descendant of curr containing val is removed from the tree
-    HINT - There are 3 cases: the node is a leaf, the node has only one subtree, the node has two subtrees
-    use leftmost to get the value (when needed) and removeLeftmost (when needed).
+    HINT - There are 3 cases: the node is a leaf, the node has only one
+    subtree, the node has two subtrees use leftmost to get the value (when
+    needed) and removeLeftmost (when needed).
  */
 struct Node *_removeNode(struct Node *curr, TYPE val) {
     /* FIX ME */
@@ -233,7 +236,8 @@ struct Node *_removeNode(struct Node *curr, TYPE val) {
 }
 
 /*
-    _leftMostValue: helper function to find the left most child of a node - iterative implementation
+    _leftMostValue: helper function to find the left most child of a node -
+    iterative implementation
     param: curr the current node
     pre: curr is not null
     post: return the value of the left most child of curr
@@ -247,7 +251,8 @@ TYPE _leftMostValue(struct Node *curr) {
 
 
 /*
-    _removeLeftMost: helper function to remove the left most child of a node - iterative implementation
+    _removeLeftMost: helper function to remove the left most child of a node -
+    iterative implementation
     param: curr - the current node
     post: the leftmost node of curr is not in the tree
  */
