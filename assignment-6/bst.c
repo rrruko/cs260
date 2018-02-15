@@ -186,13 +186,10 @@ int containsBSTree(struct BSTree *tree, TYPE val) {
     post: return 1 if found, otherwise return 0
 */
 int _containsNode(struct Node *curr, TYPE val) {
-    /* FIX ME */
-
-    return 0;
-
+    return curr->val == val
+        || (curr->left  && _containsNode(curr->left,  val))
+        || (curr->right && _containsNode(curr->right, val));
 }
-
-
 
 /*
     removeNodeFromTree: function to remove a value from the binary search tree - calls _removeNode
