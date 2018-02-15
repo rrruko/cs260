@@ -126,7 +126,6 @@ int sizeBSTree(struct BSTree *tree) {
 void addBSTree(struct BSTree *tree, TYPE val) {
     printf("Adding %.1f \n", val);
     if (tree->root == NULL) {
-        printf("Null root\n");
         struct Node* new = malloc(sizeof(struct Node));
         new->left = NULL;
         new->right = NULL;
