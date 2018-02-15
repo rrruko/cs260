@@ -208,6 +208,24 @@ void removeNodeFromTree(struct BSTree *tree, TYPE val) {
     }
 }
 
+int isLeaf(struct Node* node) {
+    return node->left == NULL && node->right == NULL;
+}
+
+int hasOneChild(struct Node* node) {
+    return node->left == NULL ^ node->right == NULL;
+}
+
+struct Node* getOnlyChild(struct Node* node) {
+    assert(hasOneChild(node));
+    if (node->left) {
+        return node->left;
+    }
+    if (node->right) {
+        return node->right;
+    }
+}
+
 /*
     _removeNode: remove a node from the tree - recursive implementation
     param1: curr - the current node
@@ -220,10 +238,47 @@ void removeNodeFromTree(struct BSTree *tree, TYPE val) {
     needed) and removeLeftmost (when needed).
  */
 struct Node *_removeNode(struct Node *curr, TYPE val) {
-    /* FIX ME */
+    assert(curr);
+    struct Node** target = NULL;
+    // We want to overwrite one of three pointers (optionally): curr,
+    // curr->left, or curr->right.
+    // To overwrite, we need to remember the address of one of those pointers.
+    // That's why target is a pointer to pointer.
+    if (curr->val == val) {
+        target = &curr;
+    } else if (curr->left && curr->left->val == val) {
+        target = &curr->left;
+    } else if (curr->right && curr->right->val == val) {
+        target = &curr->right;
+    }
+
+    if (target) {
+        printf("Target\n");
+        if (isLeaf(*target)) {
+            printf("Leaf\n");
+            free(*target);
+            *target = NULL;
+        } else if (hasOneChild(*target)) {
+            printf("One child\n");
+            struct Node* targetChild = getOnlyChild(*target);
+            free(*target);
+            *target = targetChild;
+        } else {
+            printf("Two children\n");
+            TYPE newVal = _leftMostValue((*target)->right);
+            _removeLeftMost((*target)->right);
+            (*target)->val = newVal;
+        }
+    } else {
+        printf("No target\n");
+        if (val < curr->val && curr->left) {
+            curr->left = _removeNode(curr->left, val);
+        } else if (val > curr->val && curr->right) {
+            curr->right = _removeNode(curr->right, val);
+        }
+    }
 
     return curr;
-
 }
 
 /*
