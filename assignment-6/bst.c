@@ -130,12 +130,12 @@ void addBSTree(struct BSTree *tree, TYPE val) {
     tree->cnt++;
 }
 
-struct Node *setNewNode(struct Node* dest, TYPE val) {
+void setNewNode(struct Node** dest, TYPE val) {
     struct Node* new = malloc(sizeof(struct Node));
     new->left = NULL;
     new->right = NULL;
     new->val = val;
-    dest = new;
+    *dest = new;
 }
 
 /*
@@ -147,16 +147,16 @@ struct Node *setNewNode(struct Node* dest, TYPE val) {
  */
 struct Node *_addNode(struct Node *curr, TYPE val) {
     if (curr == NULL) {
-        setNewNode(curr, val);
+        setNewNode(&curr, val);
     } else if (val < curr->val) {
         if (curr->left == NULL) {
-            setNewNode(curr->left, val);
+            setNewNode(&curr->left, val);
         } else {
             curr->left = _addNode(curr->left, val);
         }
     } else if (val > curr->val) {
         if (curr->right == NULL) {
-            setNewNode(curr->right, val);
+            setNewNode(&curr->right, val);
         } else {
             curr->right = _addNode(curr->right, val);
         }
