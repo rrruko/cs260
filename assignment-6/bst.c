@@ -130,6 +130,14 @@ void addBSTree(struct BSTree *tree, TYPE val) {
     tree->cnt++;
 }
 
+struct Node *setNewNode(struct Node* dest, TYPE val) {
+    struct Node* new = malloc(sizeof(struct Node));
+    new->left = NULL;
+    new->right = NULL;
+    new->val = val;
+    dest = new;
+}
+
 /*
     _addNode: function to add a value to the binary search tree
     param1: curr - the current node
@@ -139,28 +147,16 @@ void addBSTree(struct BSTree *tree, TYPE val) {
  */
 struct Node *_addNode(struct Node *curr, TYPE val) {
     if (curr == NULL) {
-        struct Node* new = malloc(sizeof(struct Node));
-        new->left = NULL;
-        new->right = NULL;
-        new->val = val;
-        curr = new;
+        setNewNode(curr, val);
     } else if (val < curr->val) {
         if (curr->left == NULL) {
-            struct Node* new = malloc(sizeof(struct Node));
-            new->left = NULL;
-            new->right = NULL;
-            new->val = val;
-            curr->left = new;
+            setNewNode(curr->left, val);
         } else {
             curr->left = _addNode(curr->left, val);
         }
     } else if (val > curr->val) {
         if (curr->right == NULL) {
-            struct Node* new = malloc(sizeof(struct Node));
-            new->left = NULL;
-            new->right = NULL;
-            new->val = val;
-            curr->right = new;
+            setNewNode(curr->right, val);
         } else {
             curr->right = _addNode(curr->right, val);
         }
