@@ -126,15 +126,7 @@ int sizeBSTree(struct BSTree *tree) {
  */
 void addBSTree(struct BSTree *tree, TYPE val) {
     printf("Adding %.1f \n", val);
-    if (tree->root == NULL) {
-        struct Node* new = malloc(sizeof(struct Node));
-        new->left = NULL;
-        new->right = NULL;
-        new->val = val;
-        tree->root = new;
-    } else {
-        tree->root = _addNode(tree->root, val);
-    }
+    tree->root = _addNode(tree->root, val);
     tree->cnt++;
 }
 
@@ -146,7 +138,13 @@ void addBSTree(struct BSTree *tree, TYPE val) {
     post: tree now contains val
  */
 struct Node *_addNode(struct Node *curr, TYPE val) {
-    if (val < curr->val) {
+    if (curr == NULL) {
+        struct Node* new = malloc(sizeof(struct Node));
+        new->left = NULL;
+        new->right = NULL;
+        new->val = val;
+        curr = new;
+    } else if (val < curr->val) {
         if (curr->left == NULL) {
             struct Node* new = malloc(sizeof(struct Node));
             new->left = NULL;
