@@ -149,17 +149,9 @@ struct Node *_addNode(struct Node *curr, TYPE val) {
     if (curr == NULL) {
         setNewNode(&curr, val);
     } else if (val < curr->val) {
-        if (curr->left == NULL) {
-            setNewNode(&curr->left, val);
-        } else {
-            curr->left = _addNode(curr->left, val);
-        }
+        curr->left = _addNode(curr->left, val);
     } else if (val > curr->val) {
-        if (curr->right == NULL) {
-            setNewNode(&curr->right, val);
-        } else {
-            curr->right = _addNode(curr->right, val);
-        }
+        curr->right = _addNode(curr->right, val);
     }
 
     return curr;
@@ -324,8 +316,11 @@ void _removeLeftMost(struct Node *curr) {
     post: in-order traversal s printed
 */
 void inorderTraversal(struct Node *curr) {
-    /* FIX ME */
-
+    if (curr) {
+      inorderTraversal(curr->left);
+      printf("%f ", curr->val);
+      inorderTraversal(curr->right);
+    }
 }
 
 /*
@@ -335,8 +330,11 @@ void inorderTraversal(struct Node *curr) {
     post: pre-order traversal s printed
 */
 void preorderTraversal(struct Node *curr) {
-    /* FIX ME */
-
+    if (curr) {
+        printf("%f ", curr->val);
+        preorderTraversal(curr->left);
+        preorderTraversal(curr->right);
+    }
 }
 
 /*
@@ -346,6 +344,9 @@ void preorderTraversal(struct Node *curr) {
     post: post-order traversal s printed
 */
 void postorderTraversal(struct Node *curr) {
-    /* FIX ME */
-
+    if (curr) {
+        postorderTraversal(curr->left);
+        postorderTraversal(curr->right);
+        printf("%f ", curr->val);
+    }
 }
