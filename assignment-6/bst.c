@@ -231,38 +231,20 @@ struct Node* getOnlyChild(struct Node* node) {
  */
 struct Node *_removeNode(struct Node *curr, TYPE val) {
     assert(curr);
-    struct Node** target = NULL;
-    // We want to overwrite one of three pointers (optionally): curr,
-    // curr->left, or curr->right.
-    // To overwrite, we need to remember the address of one of those pointers.
-    // That's why target is a pointer to pointer.
     if (curr->val == val) {
-        target = &curr;
-    } else if (curr->left && curr->left->val == val) {
-        target = &curr->left;
-    } else if (curr->right && curr->right->val == val) {
-        target = &curr->right;
-    }
-
-    if (target) {
-        printf("Target\n");
-        if (isLeaf(*target)) {
-            printf("Leaf\n");
-            free(*target);
-            *target = NULL;
-        } else if (hasOneChild(*target)) {
-            printf("One child\n");
-            struct Node* targetChild = getOnlyChild(*target);
-            free(*target);
-            *target = targetChild;
+        if (isLeaf(curr)) {
+            free(curr);
+            curr = NULL;
+        } else if (hasOneChild(curr)) {
+            struct Node* targetChild = getOnlyChild(curr);
+            free(curr);
+            curr = targetChild;
         } else {
-            printf("Two children\n");
-            TYPE newVal = _leftMostValue((*target)->right);
-            _removeLeftMost((*target)->right);
-            (*target)->val = newVal;
+            TYPE lmv = _leftMostValue(curr->right);
+            curr->val = lmv;
+            curr->right = _removeNode(curr->right, lmv);
         }
     } else {
-        printf("No target\n");
         if (val < curr->val && curr->left) {
             curr->left = _removeNode(curr->left, val);
         } else if (val > curr->val && curr->right) {
@@ -304,6 +286,7 @@ void _removeLeftMost(struct Node *curr) {
             curr_parent = curr;
             curr = curr->left;
     }
+    printf("removed %f\n", curr_parent->left->val);
     curr_parent->left = NULL;
     free(curr);
     printf("leftmost node removed \n");
