@@ -133,12 +133,19 @@ int sizeBSTree(struct BSTree *tree) {
     _addNode handles the actual add
  */
 void addBSTree(struct BSTree *tree, TYPE val) {
-    printf("Adding %.1f \n", val);
     tree->root = _addNode(tree->root, val);
     tree->cnt++;
 }
 
+/*
+    setNewNode: change a struct's pointer-to-node to a new leaf with value `val`
+    param1: dest - the node pointer field to write to
+    param2: val - the new value
+    pre: dest points to a pointer to node
+    post: a leaf is inserted
+*/
 void setNewNode(struct Node** dest, TYPE val) {
+    assert(dest);
     struct Node* new = malloc(sizeof(struct Node));
     new->left = NULL;
     new->right = NULL;

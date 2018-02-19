@@ -5,26 +5,26 @@
 #include <malloc.h>
 
 /*
-	printTestResult: function to print the result of a test function
-	param1: predicate - the result of the test
-	param2: nameTestFunction - name of the function being tested
-	param3: message - message passed to the test function
-	post: result is printed to standard output
+    printTestResult: function to print the result of a test function
+    param1: predicate - the result of the test
+    param2: nameTestFunction - name of the function being tested
+    param3: message - message passed to the test function
+    post: result is printed to standard output
 */
 void printTestResult(int predicate, char *nameTestFunction, char *message) {
-	if (predicate) {
-	   printf("%s() - %s: PASS\n",nameTestFunction, message);
+    if (predicate) {
+       printf("%s() - %s: PASS\n",nameTestFunction, message);
     } else {
-	   printf("%s() - %s: FAIL\n",nameTestFunction, message);
-	}
+       printf("%s() - %s: FAIL\n",nameTestFunction, message);
+    }
 }
 
 
 /*
-	testAddNode: function to test each node of the BST and children
-	pre: tree is not null
-	param: tree - the tree we are testing
-	post: none
+    testAddNode: function to test each node of the BST and children
+    pre: tree is not null
+    param: tree - the tree we are testing
+    post: none
 */
 void testAddNode(struct BSTree *tree) {
     assert(tree != NULL);
@@ -39,23 +39,23 @@ void testAddNode(struct BSTree *tree) {
     addBSTree(tree, 78);
     printTestResult((tree->root->right->val == 78) && (tree->cnt == 3), "addNode", "test add 78");
 
-	addBSTree(tree, 20);
-	printTestResult((tree->root->left->left->val == 20) && (tree->cnt == 4), "addNode", "test add 20");
+    addBSTree(tree, 20);
+    printTestResult((tree->root->left->left->val == 20) && (tree->cnt == 4), "addNode", "test add 20");
 
-	addBSTree(tree, 85);
-	printTestResult((tree->root->right->right->val == 85) && (tree->cnt == 5), "addNode", "test add 85");
+    addBSTree(tree, 85);
+    printTestResult((tree->root->right->right->val == 85) && (tree->cnt == 5), "addNode", "test add 85");
 
-	addBSTree(tree, 67);
+    addBSTree(tree, 67);
     printTestResult((tree->root->right->left->val == 67) && (tree->cnt == 6), "addNode", "test add 67");
 
     printf("--------------finished testing addNode-------------\n");
 }
 
 /*
-	testContainsBSTree: function to test that the BST contains the elements that we added to it
-	pre: tree is not null
-	param: tree - the tree we are testing
-	post: none
+    testContainsBSTree: function to test that the BST contains the elements that we added to it
+    pre: tree is not null
+    param: tree - the tree we are testing
+    post: none
 */
 void testContainsBSTree(struct BSTree *tree) {
     assert(tree != NULL);
@@ -71,27 +71,27 @@ void testContainsBSTree(struct BSTree *tree) {
 }
 
 /*
-	testLeftMost: function to test the left most element
-	param: tree - the tree we are testing
-	pre: tree is not null
-	post: none
+    testLeftMost: function to test the left most element
+    param: tree - the tree we are testing
+    pre: tree is not null
+    post: none
 */
 void testLeftMost(struct BSTree *tree) {
     assert(tree != NULL);
     printf("------------------testing testLeftMostValue-------------------\n");
 
-	printTestResult(_leftMostValue(tree->root) == 20, "_leftMostValue", "leftmost of root");
-	printTestResult(_leftMostValue(tree->root->left) == 20, "_leftMostValue", "leftmost of left subtree");
-	printTestResult(_leftMostValue(tree->root->right) == 67, "_leftMostValue", "leftmost of right subtree");
+    printTestResult(_leftMostValue(tree->root) == 20, "_leftMostValue", "leftmost of root");
+    printTestResult(_leftMostValue(tree->root->left) == 20, "_leftMostValue", "leftmost of left subtree");
+    printTestResult(_leftMostValue(tree->root->right) == 67, "_leftMostValue", "leftmost of right subtree");
 
-	printf("------------------finished testing testLeftMostValue-------------------\n");
+    printf("------------------finished testing testLeftMostValue-------------------\n");
 }
 
 /*
-	testRemoveNode: function to test the left most element
-	param: tree - the tree we are testing
-	pre: tree is not null
-	post: 3 nodes have been removed from the tree
+    testRemoveNode: function to test the left most element
+    param: tree - the tree we are testing
+    pre: tree is not null
+    post: 3 nodes have been removed from the tree
 */
 void testRemoveNode(struct BSTree *tree) {
     assert(tree != NULL);
@@ -123,11 +123,31 @@ void testRemoveNode(struct BSTree *tree) {
     printf("------------------finished testing removeNode-------------------\n");
 }
 
+/*
+    testLogNSearch: search a large binary tree to demonstrate that it's fast
+*/
+void testLogNSearch() {
+    struct BSTree* tree = newBSTree();
+    int n = 10000000;
+    printf("Building a tree with %d random elements\n", n);
+    int i;
+    for (i = 0; i < n; i++) {
+        float r = (float)(rand() % n) / (float)n;
+        addBSTree(tree, r);
+    }
+    printf("Searching the tree\n");
+    for (i = 0; i < 10; i++) {
+        float r = (float)(rand() % n) / (float)n;
+        printf("Tree contains %f: %d\n", r, containsBSTree(tree, r));
+    }
+    free(tree);
+}
+
 /*  Main function for testing different functions of the assignment
     Calls several specific testing routines (insert, delete, display, etc)
 */
 int main() {
-    struct BSTree *tree	= newBSTree();
+    struct BSTree *tree    = newBSTree();
 
     testAddNode(tree);
     testContainsBSTree(tree);
@@ -154,6 +174,7 @@ int main() {
 
     freeBSTree(tree);
 
-	return 0;
+    testLogNSearch(tree);
+    return 0;
 }
 
