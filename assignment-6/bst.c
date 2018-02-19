@@ -97,6 +97,13 @@ int isEmptyBSTree(struct BSTree *tree) {
     return tree->root == NULL;
 }
 
+/*
+    sizeSubtree: the size of a possibly-null tree
+    param: node - the tree (it is a Node because we only care about getting its
+    children
+    pre: none
+    post: the size
+*/
 int sizeSubtree(struct Node* node) {
     if (node == NULL) {
         return 0;
@@ -119,7 +126,7 @@ int sizeBSTree(struct BSTree *tree) {
 /*
     addBSTree: function to add a value to the binary search tree
     param1: tree - the binary search tree
-    param2: val    - the value to be added to the tree
+    param2: val  - the value to be added to the tree
     pre: tree is not null
     post: cnt is incremented
     _addNode handles the actual add
@@ -141,7 +148,7 @@ void setNewNode(struct Node** dest, TYPE val) {
 /*
     _addNode: function to add a value to the binary search tree
     param1: curr - the current node
-    param2: val    - the value to be added to the tree
+    param2: val  - the value to be added to the tree
     pre: curr is not null
     post: tree now contains val
  */
@@ -161,7 +168,7 @@ struct Node *_addNode(struct Node *curr, TYPE val) {
     containsBSTree: function to determine if the binary search tree contains an
     element - calls _containsNode
     param1: tree the binary search tree
-    param2: val    - the value to search for in the tree
+    param2: val - the value to search for in the tree
     pre: tree is not null
     post: return 1 if the tree contains the value, otherwise return 0
  */
@@ -173,7 +180,7 @@ int containsBSTree(struct BSTree *tree, TYPE val) {
 /*
     _containsNode: function checks for for the value in a binary search tree
     param1: curr - the current node
-    param2: val    - the value to be removed from the tree
+    param2: val  - the value to be removed from the tree
     pre: curr is not null
     post: return 1 if found, otherwise return 0
 */
@@ -181,12 +188,18 @@ int _containsNode(struct Node *curr, TYPE val) {
     return curr->val == val
         || (curr->left  && _containsNode(curr->left,  val))
         || (curr->right && _containsNode(curr->right, val));
+    /* The short-circuiting boolean operators are lazy, which means we can do a
+     * fixed-point combinator sort of thing here. Basically literally Haskell.
+     *
+     * Djikstra said that short-circuiting operators should be avoided because
+     * of this kind of weirdness. I'm not sure whether I agree with him.
+     */
 }
 
 /*
     removeNodeFromTree: function to remove a value from the binary search tree - calls _removeNode
     param1: tree - the binary search tree
-    param2: val    - the value to be removed from the tree
+    param2: val  - the value to be removed from the tree
     pre: tree is not null
     pre: val is in the tree
     post: tree size is reduced by 1
@@ -200,14 +213,34 @@ void removeNodeFromTree(struct BSTree *tree, TYPE val) {
     }
 }
 
+
+/*
+    isLeaf: whether a node is a leaf (has no children)
+    param1: node - the node in question
+    pre: node is not null
+    post: return whether there are no children
+*/
 int isLeaf(struct Node* node) {
     return node->left == NULL && node->right == NULL;
 }
 
+/*
+    hasOneChild: whether a node has exactly one child
+    param1: node - the node to count the children of
+    pre: node is not null
+    post: return whether there is exactly one child
+*/
 int hasOneChild(struct Node* node) {
+    assert(node);
     return node->left == NULL ^ node->right == NULL;
 }
 
+/*
+    getOnlyChild: get the single child of a node.
+    param1: node - the node to get the child of
+    pre: node has only one child
+    post: return the only child
+*/
 struct Node* getOnlyChild(struct Node* node) {
     assert(hasOneChild(node));
     if (node->left) {
@@ -221,7 +254,7 @@ struct Node* getOnlyChild(struct Node* node) {
 /*
     _removeNode: remove a node from the tree - recursive implementation
     param1: curr - the current node
-    param1: val - the value to be removed from the tree
+    param1: val  - the value to be removed from the tree
     pre: val is in the tree
     pre: curr is not null
     post: descendant of curr containing val is removed from the tree
@@ -231,7 +264,7 @@ struct Node* getOnlyChild(struct Node* node) {
  */
 struct Node *_removeNode(struct Node *curr, TYPE val) {
     assert(curr);
-    if (curr->val == val) {
+    if (curr->val == val) { /* curr is the node we want to remove  */
         if (isLeaf(curr)) {
             free(curr);
             curr = NULL;
@@ -244,7 +277,7 @@ struct Node *_removeNode(struct Node *curr, TYPE val) {
             curr->val = lmv;
             curr->right = _removeNode(curr->right, lmv);
         }
-    } else {
+    } else { /* We aren't there yet, so descend */
         if (val < curr->val && curr->left) {
             curr->left = _removeNode(curr->left, val);
         } else if (val > curr->val && curr->right) {
@@ -286,7 +319,6 @@ void _removeLeftMost(struct Node *curr) {
             curr_parent = curr;
             curr = curr->left;
     }
-    printf("removed %f\n", curr_parent->left->val);
     curr_parent->left = NULL;
     free(curr);
     printf("leftmost node removed \n");
