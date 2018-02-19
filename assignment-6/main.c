@@ -109,6 +109,17 @@ void testRemoveNode(struct BSTree *tree) {
     removeNodeFromTree(tree, 55);
     printTestResult((tree->root->val == 78) && (tree->root->left->val == 36) & (tree->root->right->val == 85) && (!containsBSTree(tree, 55)), "removeNodeFromTree", "remove 55(root)");
 
+    removeNodeFromTree(tree, 78);
+    printTestResult((tree->root->val == 85) && (tree->root->left->val == 36) && (tree->root->right == NULL),
+        "removeNodeFromTree", "remove 78");
+
+    removeNodeFromTree(tree, 85);
+    printTestResult((tree->root->val == 36) && (tree->root->left == NULL) && (tree->root->right == NULL),
+        "removeNodeFromTree", "remove 85");
+
+    removeNodeFromTree(tree, 36);
+    printTestResult((tree->root == NULL), "removeNodeFromTree", "remove 36");
+
     printf("------------------finished testing removeNode-------------------\n");
 }
 
@@ -122,6 +133,13 @@ int main() {
     testContainsBSTree(tree);
     testLeftMost(tree);
     testRemoveNode(tree);
+    printTestResult(isEmptyBSTree(tree), "isEmptyBSTree", "tree is empty");
+    addBSTree(tree, 15);
+    addBSTree(tree, 4);
+    addBSTree(tree, 8);
+    addBSTree(tree, 23);
+    addBSTree(tree, 16);
+    addBSTree(tree, 42);
 
     printf("------------printing in-order traversal------------ \n");
     inorderTraversal(tree->root);

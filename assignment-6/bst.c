@@ -94,6 +94,7 @@ void _freeNodes(struct Node *node) {
     return: return 1 if the tree is empty, otherwise return 0
  */
 int isEmptyBSTree(struct BSTree *tree) {
+    assert(tree);
     return tree->root == NULL;
 }
 
