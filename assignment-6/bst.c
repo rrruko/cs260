@@ -187,8 +187,8 @@ int containsBSTree(struct BSTree *tree, TYPE val) {
 */
 int _containsNode(struct Node *curr, TYPE val) {
     return curr->val == val
-        || (curr->left  && _containsNode(curr->left,  val))
-        || (curr->right && _containsNode(curr->right, val));
+        || (curr->left  && curr->val > val && _containsNode(curr->left,  val))
+        || (curr->right && curr->val < val && _containsNode(curr->right, val));
     /* The short-circuiting boolean operators are lazy, which means we can do a
      * fixed-point combinator sort of thing here. Basically literally Haskell.
      *
@@ -213,7 +213,6 @@ void removeNodeFromTree(struct BSTree *tree, TYPE val) {
         printf("node is not contained in the tree \n");
     }
 }
-
 
 /*
     isLeaf: whether a node is a leaf (has no children)
