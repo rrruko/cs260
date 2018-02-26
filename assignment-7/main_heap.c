@@ -130,8 +130,19 @@ int main() {
     printTestResult(getDynArr(taskList, 6).priority == 13, "getDynArr", "Priority == 13");
     printTestResult(getDynArr(taskList, 7).priority == 10, "getDynArr", "Priority == 10");
     printTestResult(getDynArr(taskList, 8).priority == 8, "getDynArr", "Priority == 8");
-    
+
     printf("------------------Initial testing complete------------------ \n");
+    
+    printTestResult(sizeDynArr(taskList) == 9, "sizeDynArr", "Size == 9");
+    printf("removeMinHeap\n");
+    removeMinHeap(taskList);
+    printTestResult(sizeDynArr(taskList) == 8, "sizeDynArr", "Size == 8");
+    printf("removing 8 times\n");
+    int times;
+    for (times = 0; times < 8; times++) {
+        removeMinHeap(taskList);
+    }
+    printTestResult(sizeDynArr(taskList) == 0, "sizeDynArr", "Size == 0");
     
     return 0;
 }
