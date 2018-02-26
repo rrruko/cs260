@@ -370,6 +370,7 @@ void addHeap(struct DynArr *heap, TYPE val) {
 void removeMinHeap(struct DynArr *heap) {
     assert(heap->size > 0);
     TYPE last = heap->data[heap->size - 1];
+    heap->data[0] = last;
     heap->size--;
     int i = 0;
     while (1) {
@@ -393,7 +394,6 @@ void removeMinHeap(struct DynArr *heap) {
             swapDynArr(heap, rightChildIx, i);
             i = rightChildIx;
         } else {
-            heap->data[0] = last;
             return;
         }
     }
