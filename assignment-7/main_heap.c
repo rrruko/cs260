@@ -60,9 +60,10 @@ void printTask(TYPE task) {
     format: "Priority: XX - Description: Ipsum Lorem" - use the printTask function
 */
 void printList(struct DynArr *heap) {
-    /* FIXME */
-    
-    
+    int i;
+    for (i = 0; i < heap->size; i++) {
+        printTask(heap->data[i]);
+    }
 }
 
 int main() {

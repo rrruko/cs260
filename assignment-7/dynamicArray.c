@@ -278,9 +278,19 @@ void copyDynArr(struct DynArr *source, struct DynArr *destination) {
     return: value of first node's value
 */
 TYPE getMinHeap(struct DynArr *heap) {
-    /* FIXME */
-    
-    
+    return getDynArr(heap, 0);
+}
+
+int getParentIndex(int i) {
+    return (i - 1) / 2;
+}
+
+int getLeftChildIx(int i) {
+    return i * 2 + 1;
+}
+
+int getRightChildIx(int i) {
+    return i * 2 + 2;
 }
 
 /*
@@ -334,9 +344,20 @@ void _siftDown(struct DynArr *heap, int index) {
     post: heap size is incremented
 */
 void addHeap(struct DynArr *heap, TYPE val) {
-    /* FIXME */
-    
-    
+    addDynArr(heap, val);
+    printf("Added (%d,%s)\n", val.priority, val.description);
+    int i = heap->size - 1;
+    while(i > 0) {
+        int parentIndex = getParentIndex(i);
+        int order = compare(heap->data[parentIndex], heap->data[i]);
+        if (order == 1) {
+            printf("  swapped %d and %d\n", parentIndex, i);
+            swapDynArr(heap, parentIndex, i);
+            i = getParentIndex(i);
+        } else {
+            return;
+        }
+    }
 }
 
 /*
@@ -347,7 +368,33 @@ void addHeap(struct DynArr *heap, TYPE val) {
     HINT: use the _smallerIndexHeap to find the smaller node of the current node
 */
 void removeMinHeap(struct DynArr *heap) {
-    /* FIXME */
-    
-    
+    assert(heap->size > 0);
+    TYPE last = heap->data[heap->size - 1];
+    heap->size--;
+    int i = 0;
+    while (1) {
+        int leftChildIx = getLeftChildIx(i);
+        int rightChildIx = getRightChildIx(i);
+        if (leftChildIx < heap->size && // there are two children
+            rightChildIx < heap->size) {
+                TYPE leftChild = heap->data[leftChildIx];
+                TYPE rightChild = heap->data[rightChildIx];
+                int smallerChildIx = compare(leftChild, rightChild) == -1 ? 
+                    leftChildIx : rightChildIx;
+                swapDynArr(heap, smallerChildIx, i);
+                i = smallerChildIx;
+            }
+        else if (leftChildIx < heap->size &&
+                compare(heap->data[leftChildIx], heap->data[i]) == -1) {
+            swapDynArr(heap, leftChildIx, i);
+            i = leftChildIx;
+        } else if (rightChildIx < heap->size &&
+                compare(heap->data[rightChildIx], heap->data[i]) == -1) {
+            swapDynArr(heap, rightChildIx, i);
+            i = rightChildIx;
+        } else {
+            heap->data[0] = last;
+            return;
+        }
+    }
 }
