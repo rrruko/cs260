@@ -281,17 +281,6 @@ TYPE getMinHeap(struct DynArr *heap) {
     return getDynArr(heap, 0);
 }
 
-int getParentIndex(int i) {
-    return (i - 1) / 2;
-}
-
-int getLeftChildIx(int i) {
-    return i * 2 + 1;
-}
-
-int getRightChildIx(int i) {
-    return i * 2 + 2;
-}
 
 /*
     _smallerIndexHeap: Get the index of the smaller node between two nodes in a heap - this is an auxiliary function
@@ -302,9 +291,19 @@ int getRightChildIx(int i) {
     return: the index of the smaller node
 */
 int _smallerIndexHeap(struct DynArr *heap, int i, int j) {
-    /* FIXME */
-    
-    
+    assert(i < heap->size && j < heap->size);
+    // Don't actually need to be left and right
+    TYPE leftChild = heap->data[i];
+    TYPE rightChild = heap->data[j];
+    return compare(leftChild, rightChild) == -1 ? i : j;
+}
+
+/*
+    getParentIndex: Get the index of the parent of the node at the given index
+    (helper for _siftUp)
+*/
+int getParentIndex(int i) {
+    return (i - 1) / 2;
 }
 
 /*
@@ -316,9 +315,33 @@ int _smallerIndexHeap(struct DynArr *heap, int i, int j) {
     post: heap properties are maintained
 */
 void _siftUp(struct DynArr *heap, int index) {
-    /* FIXME */
-    
-    
+    while(index > 0) {
+        int parentIndex = getParentIndex(index);
+        int order = compare(heap->data[parentIndex], heap->data[index]);
+        if (order == 1) {
+            //printf("  swapped %d and %d\n", parentIndex, i);
+            swapDynArr(heap, parentIndex, index);
+            index = getParentIndex(index);
+        } else {
+            return;
+        }
+    }
+}
+
+/*
+    getLeftChildIx: Get the index of the left child of the node at the given
+    index (helper for _siftDown)
+*/
+int getLeftChildIx(int i) {
+    return i * 2 + 1;
+}
+
+/*
+    getRightChildIx: Get the index of the right child of the node at the given
+    index (helper for _siftDown)
+*/
+int getRightChildIx(int i) {
+    return i * 2 + 2;
 }
 
 /*
@@ -330,9 +353,33 @@ void _siftUp(struct DynArr *heap, int index) {
     post: heap properties are maintained
 */
 void _siftDown(struct DynArr *heap, int index) {
-    /* FIXME */
-    
-    
+    while (1) {
+        int lChildIx = getLeftChildIx(index);
+        int rChildIx = getRightChildIx(index);
+
+        // If there are two children:
+        if (lChildIx < heap->size && rChildIx < heap->size) {
+                int smallerIx = _smallerIndexHeap(heap, lChildIx, rChildIx);
+                swapDynArr(heap, smallerIx, index);
+                index = smallerIx;
+        }
+        // If the left child is smaller:
+        else if (lChildIx < heap->size &&
+                compare(heap->data[lChildIx], heap->data[index]) == -1) {
+            swapDynArr(heap, lChildIx, index);
+            index = lChildIx;
+        } 
+        // If the right child is smaller:
+        else if (rChildIx < heap->size &&
+                compare(heap->data[rChildIx], heap->data[index]) == -1) {
+            swapDynArr(heap, rChildIx, index);
+            index = rChildIx;
+        } 
+        // If there are no smaller children, we're done
+        else {
+            return;
+        }
+    }
 }
 
 /*
@@ -345,19 +392,8 @@ void _siftDown(struct DynArr *heap, int index) {
 */
 void addHeap(struct DynArr *heap, TYPE val) {
     addDynArr(heap, val);
-    printf("Added (%d,%s)\n", val.priority, val.description);
-    int i = heap->size - 1;
-    while(i > 0) {
-        int parentIndex = getParentIndex(i);
-        int order = compare(heap->data[parentIndex], heap->data[i]);
-        if (order == 1) {
-            printf("  swapped %d and %d\n", parentIndex, i);
-            swapDynArr(heap, parentIndex, i);
-            i = getParentIndex(i);
-        } else {
-            return;
-        }
-    }
+    //printf("Added (%d,%s)\n", val.priority, val.description);
+    _siftUp(heap, heap->size - 1);
 }
 
 /*
@@ -372,29 +408,5 @@ void removeMinHeap(struct DynArr *heap) {
     TYPE last = heap->data[heap->size - 1];
     heap->data[0] = last;
     heap->size--;
-    int i = 0;
-    while (1) {
-        int leftChildIx = getLeftChildIx(i);
-        int rightChildIx = getRightChildIx(i);
-        if (leftChildIx < heap->size && // there are two children
-            rightChildIx < heap->size) {
-                TYPE leftChild = heap->data[leftChildIx];
-                TYPE rightChild = heap->data[rightChildIx];
-                int smallerChildIx = compare(leftChild, rightChild) == -1 ? 
-                    leftChildIx : rightChildIx;
-                swapDynArr(heap, smallerChildIx, i);
-                i = smallerChildIx;
-            }
-        else if (leftChildIx < heap->size &&
-                compare(heap->data[leftChildIx], heap->data[i]) == -1) {
-            swapDynArr(heap, leftChildIx, i);
-            i = leftChildIx;
-        } else if (rightChildIx < heap->size &&
-                compare(heap->data[rightChildIx], heap->data[i]) == -1) {
-            swapDynArr(heap, rightChildIx, i);
-            i = rightChildIx;
-        } else {
-            return;
-        }
-    }
+    _siftDown(heap, 0);
 }
