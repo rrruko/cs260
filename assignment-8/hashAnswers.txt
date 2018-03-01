@@ -1,0 +1,45 @@
+1.  Provide two different keys which will hash to the same value using
+    hashFunction1().
+
+        "eleven plus two" and "twelve plus one" will both hash to the same
+        value. So will any pair chosen among:
+            "az", "by", "cx", "dw", "ev", "fu", "gt", "hs", "ir", "jq",
+            "kp", "lo", "mn", "nm", "ol", "pk", "qj", "ri", "sh", "tg",
+            "uf", "ve", "wd", "xc", "yb", and "za".
+
+2.  Which hash function will provide fewer collisions, assuming a sufficiently
+    large table? Why?
+
+        I can't prove it, but I think it's the second one, which multiplies
+        each char's codepoint by its position in the string and takes the sum.
+        I think it's that one because it seems harder to think of pairs of keys
+        that will result in a collision.
+
+        Given the string "az", and assuming only lowercase letters, the strings
+        that collide with it under hashFunction2 are:
+            "az", "bx", "cv", "dt", "er", "fp", "gn", "hl", "ij", "jh", "kf",
+            "ld", and "mb".
+        Which is about half the number of collisions for hashFunction1.
+
+3.  Will changing the hash function potentially alter the number of keys stored
+    in the table? Why?
+
+        No, that can't happen. If you insert a key into a hash map, the key
+        always ends up in the table. It would be a pretty bad data structure if
+        it didn't insert things when you try.
+
+4.  Will changing the hash function potentially alter the size of the hash map?
+    Why?
+
+        A hash function that always returns 0 will never increase the size of
+        the hash map; conversely, a hash function that never results in
+        collisions will eventually cause all the buckets to be filled,
+        prompting a resize.
+
+5.  Why do we need to re-hash the keys in the table after a re-size?
+
+        A hash map's lookup code will probably select an index into the
+        internal array by computing the hash to lookup modulo the table's size.
+        That means if the size changes, the index at which keys are expected to
+        be located may change. Though some lookups will still succeed, others
+        will fail.
