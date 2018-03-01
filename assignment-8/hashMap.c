@@ -112,11 +112,11 @@ void _reSizeTable(struct hashMap *h, int newCap) {
 
 /*
    insertMap: insert the key/value into a hash link - no duplicate keys are
-   permitted 
-   param1: h - the map 
-   param2: k - the key to insert - in this case, the word 
-   param3: v - the value to insert - in this case, the number of occurrences 
-   pre: h is not empty 
+   permitted
+   param1: h - the map
+   param2: k - the key to insert - in this case, the word
+   param3: v - the value to insert - in this case, the number of occurrences
+   pre: h is not empty
    post: map contains the key/value
    post: count has been incremented
 
@@ -171,6 +171,7 @@ void insertMap(struct hashMap *h, KeyType k, ValueType v) {
     return: return 0 is not found, otherwise return 1
 */
 int containsKey(struct hashMap *h, KeyType k) {
+    assert(h != NULL);
     int hash = _hashValue(k, h->hashID);
     hash %= h->tableSize;
 
@@ -191,20 +192,30 @@ int containsKey(struct hashMap *h, KeyType k) {
 
 /*
     removeKey: find the hash link for the key and remove it, also free the
-    memory for the hash link If unable to find the key, then print an appropriate
-    message param1: h - the map param2: k - the key to remove pre: h is not NULL
+    memory for the hash link If unable to find the key, then print an
+    appropriate message
+    param1: h - the map
+    param2: k - the key to remove
+    pre: h is not NULL
     post: key has been removed from the table
     post: count has been decremented
     HINT - When the value is the first link, then it is a special case
  */
 void removeKey(struct hashMap *h, KeyType k) {
-    /* FIX ME */
+    assert(h != NULL);
+    int hash = _hashValue(k, h->hashID);
+    hash %= h->tableSize;
 
-    /* check for the key, if not found, then print message and return */
-
-    /* hash the key */
-    /* find key and remove it */
-    /* special case for single link */
+    struct hashLink** link = &(h->table[hash]);
+    while (*link != NULL) {
+        if (strcmp((*link)->key, k) == 0) {
+            struct hashLink* tmp = *link;
+            *link = (*link)->next;
+            free(tmp);
+        } else {
+            link = &((*link)->next);
+        }
+    }
 }
 
 /*
