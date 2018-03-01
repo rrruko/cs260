@@ -112,10 +112,13 @@ void _reSizeTable(struct hashMap *h, int newCap) {
 
 /*
    insertMap: insert the key/value into a hash link - no duplicate keys are
-   permitted param1: h - the map param2: k - the key to insert - in this case,
-   the word param3: v - the value to insert - in this case, the number of
-   occurrences pre: h is not empty post: map contains the key/value post: count
-   has been incremented
+   permitted 
+   param1: h - the map 
+   param2: k - the key to insert - in this case, the word 
+   param3: v - the value to insert - in this case, the number of occurrences 
+   pre: h is not empty 
+   post: map contains the key/value
+   post: count has been incremented
 
    Duplicate values - if a duplicate key is found, leave it and insert the new
    value in the link Ex. You can't have two hash links for the word 'bobcat',
@@ -134,7 +137,29 @@ void insertMap(struct hashMap *h, KeyType k, ValueType v) {
     // debugging information
     printf("KEY: %s HASH: %d val:%d \n", k, hash, v);
 
-    /* FIX ME */
+    struct hashLink* link = h->table[hash];
+    if (link == NULL) {
+        h->table[hash] = malloc(sizeof(struct hashLink));
+        link = h->table[hash];
+        link->next  = NULL;
+        link->key   = k;
+        link->value = v;
+        h->count += 1;
+    } else {
+        while (strcmp(link->key, k) != 0 && link->next != NULL) {
+            link = link->next;
+        }
+        if (strcmp(link->key, k) == 0) {
+            printf("  [That key was already present.]\n");
+            link->value = v;
+        } else {
+            link->next = malloc(sizeof(struct hashLink));
+            link->next->next  = NULL;
+            link->next->key   = k;
+            link->next->value = v;
+            h->count += 1;
+        }
+    }
 }
 
 /*
@@ -146,7 +171,20 @@ void insertMap(struct hashMap *h, KeyType k, ValueType v) {
     return: return 0 is not found, otherwise return 1
 */
 int containsKey(struct hashMap *h, KeyType k) {
-    /* FIX ME */
+    int hash = _hashValue(k, h->hashID);
+    hash %= h->tableSize;
+
+    struct hashLink* link = h->table[hash];
+    if (link != NULL) {
+        printf("There's something here...\n");
+        while (strcmp(link->key, k) != 0 && link->next != NULL) {
+            printf("Stepping...\n");
+            link = link->next;
+        }
+        if (strcmp(link->key, k) == 0) {
+            return 1;
+        }
+    }
 
     return 0;
 }
@@ -194,7 +232,14 @@ ValueType valAtKey(struct hashMap *h, KeyType k) {
 */
 int fullBuckets(struct hashMap *h) {
     assert(h != NULL);
-    return h->count;
+    int count = 0;
+    int i;
+    for (i = 0; i < h->tableSize; i++) {
+        if (h->table[i] != NULL) {
+            count += 1;
+        }
+    }
+    return count;
 }
 
 /*
@@ -208,7 +253,7 @@ int fullBuckets(struct hashMap *h) {
 */
 int emptyBuckets(struct hashMap *h) {
     assert(h != NULL);
-    return h->tableSize - h->count;
+    return h->tableSize - fullBuckets(h);
 }
 
 /*
@@ -220,9 +265,17 @@ int emptyBuckets(struct hashMap *h) {
     this will be the total number of hash links in the table
 */
 int linkCount(struct hashMap *h) {
-    /* FIX ME */
-
-    return 0;
+    assert(h != NULL);
+    int count = 0;
+    int i;
+    for (i = 0; i < h->tableSize; i++) {
+        struct hashLink* link = h->table[i];
+        while (link != NULL) {
+            link = link->next;
+            count += 1;
+        }
+    }
+    return count;
 }
 
 /*
@@ -240,7 +293,7 @@ void printMap(struct hashMap *h) {
     int i;
     for (i = 0; i < h->tableSize; i++) {
         printf("Bucket %d: ", i);
-        hashLink* link = h->table[i];
+        struct hashLink* link = h->table[i];
         while (link != NULL) {
             printf("%s (%d)", link->key, link->value);
             link = link->next;

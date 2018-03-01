@@ -118,6 +118,7 @@ int main(int argc, const char *argv[]) {
                "Search for 'despair' after remove");
 
     printf("--------------- Printing hash table --------------- \n");
+    printMap(hashTable);
 
     deleteMap(hashTable);
 
