@@ -7,9 +7,12 @@
     return: the sum of the ASCII values of the word is returned
 */
 int hashFunction1(char *str) {
-    /* FIX ME */
-
-    return 1;
+    int sum = 0;
+    int i = 0;
+    for (i = 0; str[i] != '\0'; i++) {
+        sum += str[i];
+    }
+    return sum;
 }
 
 /*
@@ -47,11 +50,25 @@ int _hashValue(char *key, int hashNum) {
     pre: h is not NULL
     pre: tableSize is greater than 0
     post: memory for table has been allocated - need to store specified
-    (tableSize) hash links post: tableSize has been set to tableSize post: count
-    is set to 0 post: hashID is set to ID post: all hash links (buckets) are
-    initialized to NULL
+    (tableSize) hash links
+    post: tableSize has been set to tableSize
+    post: count is set to 0
+    post: hashID is set to ID
+    post: all hash links (buckets) are initialized to NULL
 */
-void _initMap(struct hashMap *h, int tableSize, int ID) { /* FIX ME */ }
+void _initMap(struct hashMap *h, int tableSize, int ID) {
+    assert(h != NULL);
+    assert(tableSize > 0);
+
+    h->table = malloc(tableSize * sizeof(struct hashLink*));
+    int i;
+    for (i = 0; i < tableSize; i++) {
+        h->table[i] = NULL;
+    }
+    h->tableSize = tableSize;
+    h->count = 0;
+    h->hashID = ID;
+}
 
 /*
     createMap: allocate memory and initialize a hash map
@@ -176,21 +193,22 @@ ValueType valAtKey(struct hashMap *h, KeyType k) {
     this will be the number of 'chains' in the table
 */
 int fullBuckets(struct hashMap *h) {
-    /* FIX ME */
-
-    return 0;
+    assert(h != NULL);
+    return h->count;
 }
 
 /*
     emptyBuckets: returns the number of empty buckets in the table, these are
-    buckets which have no hashlinks in them param1: h - the hash table pre: h
-    is not null post: no changes to the table return: the number of empty
-    buckets in the table HINT - you need to check the hash map for NULLs
+    buckets which have no hashlinks in them
+    param1: h - the hash table
+    pre: h is not null
+    post: no changes to the table
+    return: the number of empty buckets in the table
+    HINT - you need to check the hash map for NULLs
 */
 int emptyBuckets(struct hashMap *h) {
-    /* FIX ME */
-
-    return 0;
+    assert(h != NULL);
+    return h->tableSize - h->count;
 }
 
 /*
@@ -213,10 +231,26 @@ int linkCount(struct hashMap *h) {
     pre: h is not NULL
     post: map has been printed to standard output
     return: contents of the hash map are displayed via standard output - see
-    format below bucket x: key (value), key (value, .... Ex. Bucket 1: cat (1),
-    dog (1), the (5)...
+    format below
+    bucket x: key (value), key (value, ....
+    Ex. Bucket 1: cat (1), dog (1), the (5)...
 */
-void printMap(struct hashMap *h) { /* FIX ME */ }
+void printMap(struct hashMap *h) {
+    assert(h != NULL);
+    int i;
+    for (i = 0; i < h->tableSize; i++) {
+        printf("Bucket %d: ", i);
+        hashLink* link = h->table[i];
+        while (link != NULL) {
+            printf("%s (%d)", link->key, link->value);
+            link = link->next;
+            if (link != NULL) {
+                printf(", ");
+            }
+        }
+        printf("\n");
+    }
+}
 
 /*
     tableLoad: determine the load of the table
