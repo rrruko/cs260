@@ -198,5 +198,11 @@ int main(int argc, const char *argv[]) {
 
     printMap(concord);
 
+    assertTrue(
+        hashFunction1("eleven plus two") ==
+        hashFunction1("twelve plus one"),
+        "hashFunction1 hashes anagrams the same"
+    );
+
     return 0;
 }
