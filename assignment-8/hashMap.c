@@ -100,8 +100,8 @@ struct hashMap *createMap(int tableSize, int ID) {
     except the copy/re-hash. Free the temp data as you copy/re-hash.
 */
 void _reSizeTable(struct hashMap *h, int newCap) {
-    struct hashLink *cur,
-        *del; /* Used to free the old hash links and iterate through them */
+    struct hashLink *cur, *del;        /* Used to free the old hash links and
+                                            iterate through them */
     struct hashLink **temp = h->table; /* pointer to the old table */
     int tempSize = h->tableSize;       /* size of the old table */
     _initMap(h, newCap, h->hashID);    /* Re-initialize the table */
@@ -159,6 +159,10 @@ void insertMap(struct hashMap *h, KeyType k, ValueType v) {
             link->next->value = v;
             h->count += 1;
         }
+    }
+
+    if (tableLoad(h) > LOAD_FACTOR_THRESHOLD) {
+        _reSizeTable(h, h->tableSize * 2);
     }
 }
 
@@ -228,8 +232,20 @@ void removeKey(struct hashMap *h, KeyType k) {
     return: return the value found at the key - return 0 if not found
 */
 ValueType valAtKey(struct hashMap *h, KeyType k) {
-    /* FIX ME */
-
+    assert(h != NULL);
+    int hash = _hashValue(k, h->hashID);
+    hash %= h->tableSize;
+    struct hashLink* link = h->table[hash];
+    if (link == NULL) {
+        printf("???");
+    }
+    while (link != NULL) {
+        if (strcmp(link->key, k) == 0) {
+            return link->value;
+        }
+        link = link->next;
+    }
+    printf("Key not found\n");
     return 0;
 }
 

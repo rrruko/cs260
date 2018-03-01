@@ -69,7 +69,12 @@ char *getWord(FILE *file) {
     HINT - this is a 'normal' insert, the difference is that the value is not
     always 1 use valAtKey() and insertMap()
 */
-void concordance(struct hashMap *ht, char *word) { /* FIX ME */ }
+void concordance(struct hashMap *ht, char *word) {
+    assert(ht != NULL);
+    int v = valAtKey(ht, word);
+    printf("valAtKey(ht, %s) is %d\n", word, v);
+    insertMap(ht, word, v + 1);
+}
 
 int main(int argc, const char *argv[]) {
     char *fn; /* File name */
@@ -141,29 +146,31 @@ int main(int argc, const char *argv[]) {
     assertTrue(emptyBuckets(hashTable2) == 42, "Test empty buckets (42)");
     assertTrue(linkCount(hashTable2) == 59, "Test link count (59)");
 
-    /*
     printf("--------------- Testing remove --------------- \n");
 
 
-    assertTrue(containsKey(hashTable2, "yuck") == 0, "Search for 'yuck'");
-    removeKey(hashTable2, "yuck"); //Should print some type of 'not found'
-    message assertTrue(containsKey(hashTable2, "despair") == 1, "Search for
-    'despair'"); removeKey(hashTable2, "despair");
-    assertTrue(containsKey(hashTable2, "despair") == 0, "Search for 'despair'
-    after remove"); assertTrue(containsKey(hashTable2, "belief") == 1, "Search
-    for 'belief'"); removeKey(hashTable2, "belief");
-    assertTrue(containsKey(hashTable2, "belief") == 0, "Search for 'belief'
-    after remove"); assertTrue(containsKey(hashTable2, "degree") == 1, "Search
-    for 'degree'"); removeKey(hashTable2, "degree");
-    assertTrue(containsKey(hashTable2, "degree") == 0, "Search for 'degree'
-    after remove");
-    */
+    assertTrue(containsKey(hashTable2, "yuck") == 0,
+        "Search for 'yuck'");
+    /* Should print some type of 'not found' message */
+    removeKey(hashTable2, "yuck");
+    assertTrue(containsKey(hashTable2, "despair") == 1,
+        "Search for 'despair'");
+    removeKey(hashTable2, "despair");
+    assertTrue(containsKey(hashTable2, "despair") == 0,
+        "Search for 'despair' after remove");
+    assertTrue(containsKey(hashTable2, "belief") == 1,
+        "Search for 'belief'");
+    removeKey(hashTable2, "belief");
+    assertTrue(containsKey(hashTable2, "belief") == 0,
+        "Search for 'belief' after remove");
+    assertTrue(containsKey(hashTable2, "degree") == 1,
+        "Search for 'degree'");
+    removeKey(hashTable2, "degree");
+    assertTrue(containsKey(hashTable2, "degree") == 0,
+        "Search for 'degree' after remove");
 
     printf("Closing file: %s \n", fn);
     fclose(filePtr);
-
-    /* UNCOMMENT AFTER YOU GET THE MAP WORKING */
-    /*
 
     printf("--------------- Testing table stats 2 --------------- \n");
 
@@ -175,7 +182,7 @@ int main(int argc, const char *argv[]) {
     concord = createMap(10, 2);
 
 
-    //instead of calling insert, we call concordance
+    /* instead of calling insert, we call concordance */
     while((word = getWord(filePtr)) != '\0') {
         concordance(concord, word);
     }
@@ -187,8 +194,9 @@ int main(int argc, const char *argv[]) {
     printf("empty buckets: %d \n", emptyBuckets(concord));
     printf("link count: %d \n", linkCount(concord));
 
-    //Test further on your own
-    */
+    /* Test further on your own */
+
+    printMap(concord);
 
     return 0;
 }
