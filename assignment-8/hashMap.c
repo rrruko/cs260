@@ -105,9 +105,20 @@ void _reSizeTable(struct hashMap *h, int newCap) {
     struct hashLink **temp = h->table; /* pointer to the old table */
     int tempSize = h->tableSize;       /* size of the old table */
     _initMap(h, newCap, h->hashID);    /* Re-initialize the table */
-    /* FIX ME */
-
-    /* re-hash links */
+    
+    printf("resizing\n");
+    int i;
+    for (i = 0; i < tempSize; i++) {
+         printf("%d\n", i);
+         struct hashLink* l = temp[i];
+         if (l) {
+             int hash = _hashValue(l->key, h->hashID);
+             hash = hash % h->tableSize;
+             h->table[hash] = l;
+         }
+    }
+    printf("done\n");
+    free(temp);
 }
 
 /*
@@ -343,9 +354,7 @@ void printMap(struct hashMap *h) {
     division
 */
 float tableLoad(struct hashMap *h) {
-    /* FIX ME */
-
-    return 0;
+    return (float)fullBuckets(h) / (float)h->tableSize;
 }
 
 /*
@@ -356,9 +365,7 @@ float tableLoad(struct hashMap *h) {
     return: return the tableSize
 */
 int capacityMap(struct hashMap *h) {
-    /* FIX ME */
-
-    return 0;
+    return h->tableSize;
 }
 
 /*
