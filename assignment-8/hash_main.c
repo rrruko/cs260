@@ -72,7 +72,6 @@ char *getWord(FILE *file) {
 void concordance(struct hashMap *ht, char *word) {
     assert(ht != NULL);
     int v = valAtKey(ht, word);
-    printf("valAtKey(ht, %s) is %d\n", word, v);
     insertMap(ht, word, v + 1);
 }
 
@@ -203,6 +202,8 @@ int main(int argc, const char *argv[]) {
         hashFunction1("twelve plus one"),
         "hashFunction1 hashes anagrams the same"
     );
+
+    deleteMap(concord);
 
     return 0;
 }

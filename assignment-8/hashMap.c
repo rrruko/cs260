@@ -21,12 +21,12 @@ int hashFunction1(char *str) {
     return: the hash is returned - not as easily explained as hashFunction1
 */
 int hashFunction2(char *str) {
-    int i;
-    int h = 0;
+    int sum = 0;
+    int i = 0;
     for (i = 0; str[i] != '\0'; i++) {
-        h += (i + 1) * str[i];
+        sum += (i + 1) * str[i];
     }
-    return abs(h);
+    return sum;
 }
 
 /*
@@ -106,18 +106,16 @@ void _reSizeTable(struct hashMap *h, int newCap) {
     int tempSize = h->tableSize;       /* size of the old table */
     _initMap(h, newCap, h->hashID);    /* Re-initialize the table */
     
-    printf("resizing\n");
     int i;
     for (i = 0; i < tempSize; i++) {
-         printf("%d\n", i);
-         struct hashLink* l = temp[i];
-         if (l) {
-             int hash = _hashValue(l->key, h->hashID);
-             hash = hash % h->tableSize;
-             h->table[hash] = l;
+         cur = temp[i];
+         while (cur) {
+             insertMap(h, cur->key, cur->value);
+             del = cur;
+             cur = cur->next;
+             free(del);
          }
     }
-    printf("done\n");
     free(temp);
 }
 
@@ -145,9 +143,6 @@ void insertMap(struct hashMap *h, KeyType k, ValueType v) {
     int hash = _hashValue(k, h->hashID);
     hash = hash % h->tableSize;
 
-    // debugging information
-    printf("KEY: %s HASH: %d val:%d \n", k, hash, v);
-
     struct hashLink* link = h->table[hash];
     if (link == NULL) {
         h->table[hash] = malloc(sizeof(struct hashLink));
@@ -161,7 +156,6 @@ void insertMap(struct hashMap *h, KeyType k, ValueType v) {
             link = link->next;
         }
         if (strcmp(link->key, k) == 0) {
-            printf("  [That key was already present.]\n");
             link->value = v;
         } else {
             link->next = malloc(sizeof(struct hashLink));
@@ -192,9 +186,7 @@ int containsKey(struct hashMap *h, KeyType k) {
 
     struct hashLink* link = h->table[hash];
     if (link != NULL) {
-        printf("There's something here...\n");
         while (strcmp(link->key, k) != 0 && link->next != NULL) {
-            printf("Stepping...\n");
             link = link->next;
         }
         if (strcmp(link->key, k) == 0) {
@@ -202,6 +194,7 @@ int containsKey(struct hashMap *h, KeyType k) {
         }
     }
 
+    printf("Not found\n");
     return 0;
 }
 
@@ -248,7 +241,6 @@ ValueType valAtKey(struct hashMap *h, KeyType k) {
     hash %= h->tableSize;
     struct hashLink* link = h->table[hash];
     if (link == NULL) {
-        printf("???");
     }
     while (link != NULL) {
         if (strcmp(link->key, k) == 0) {
@@ -256,7 +248,6 @@ ValueType valAtKey(struct hashMap *h, KeyType k) {
         }
         link = link->next;
     }
-    printf("Key not found\n");
     return 0;
 }
 
@@ -374,7 +365,20 @@ int capacityMap(struct hashMap *h) {
     pre: - h is not null
     post: memory used by the hash buckets has been freed
 */
-void _freeMap(struct hashMap *h) { /* FIX ME */ }
+void _freeMap(struct hashMap *h) {
+    struct hashLink *cur, *del;        /* Used to free the old hash links and
+                                            iterate through them */
+    int i;
+    for (i = 0; i < h->tableSize; i++) {
+         cur = h->table[i];
+         while (cur) {
+             del = cur;
+             cur = cur->next;
+             free(del);
+         }
+    }
+    free(h->table);
+}
 
 /*
     freeMap: deallocate buckets and the hash map
